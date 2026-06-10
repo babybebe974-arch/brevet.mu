@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>🤖 Correcteur – Brevet 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#000000;font-family:'DM Sans',sans-serif;padding:1rem;color:#ffffff;}
+    .container{max-width:900px;margin:0 auto;background:#1a1a1a;border-radius:2rem;padding:2rem;border:1px solid #ffcc00;}
+    h1{font-family:'Playfair Display',serif;font-size:2rem;color:#ffcc00;margin-bottom:0.25rem;}
+    .sub{color:#aaa;margin-bottom:2rem;border-left:3px solid #ffcc00;padding-left:1rem;}
+    .back-link{display:inline-block;margin-bottom:1rem;text-decoration:none;color:#5ecfb1;font-size:0.8rem;}
+    
+    textarea{width:100%;background:#0a0a0f;border:1px solid #333;border-radius:1rem;padding:1rem;color:white;font-size:1rem;margin-bottom:1rem;font-family:'DM Sans',sans-serif;resize:vertical;}
+    .btn-group{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
+    button{background:#1e2a3e;border:1px solid #5ecfb1;border-radius:40px;padding:0.5rem 1.2rem;font-size:0.8rem;color:#5ecfb1;cursor:pointer;}
+    button:hover{background:#2a3652;}
+    .loading{color:#ffcc00;text-align:center;padding:1rem;display:none;}
+    .resultat{background:#2a2a2a;border-radius:1rem;padding:1rem;margin-top:1rem;border-left:4px solid #5ecfb1;display:none;}
+    .selecteur{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center;}
+    select{background:#2a2a2a;border:1px solid #333;border-radius:40px;padding:0.4rem 0.8rem;color:white;}
+    .note{font-size:2rem;font-weight:700;color:#ffcc00;}
+  </style>
+  <script src="monetization.js"></script>
+<script src="proxy-client.js"></script>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link">← Retour au hub</a>
+  <h1>🤖 Correcteur</h1>
+  <div class="sub">Notation • Correction • Méthodologie par matière</div>
+
+  <div class="selecteur">
+    <label>📚 Matière : </label>
+    <select id="matiereSelect">
+      <option value="francais">📖 Français (rédaction, essai, commentaire)</option>
+      <option value="maths">📐 Mathématiques (démonstration, résolution)</option>
+      <option value="histoire">🌍 Histoire-Géo & EMC (paragraphe argumenté)</option>
+      <option value="sciences">🔬 Sciences (démarche scientifique)</option>
+    </select>
+  </div>
+
+  <textarea id="userTexte" rows="12" placeholder="Collez votre texte ici..."></textarea>
+  
+  <div class="btn-group">
+    <button id="corrigerBtn">🤖 Corriger mon texte</button>
+    <button id="effacerBtn">🗑️ Effacer</button>
+  </div>
+
+  <div id="loading" class="loading">⏳ Analyse en cours...</div>
+  <div id="resultat" class="resultat"></div>
+
+  <div class="sub" style="margin-top:1rem; font-size:0.7rem;">💡 Le correcteur note selon le barème officiel et donne une aide méthodologique adaptée à la matière.</div>
+</div>
+
+<script>
+  // ============================================================
+  // URL DU PROXY GOOGLE SHEETS
+  // ============================================================
+      
+  // Barèmes et méthodologies par matière
+  const baremes = {
+    francais: { nom: "Français", points: 20, criteres: "Orthographe (4 pts), syntaxe (4 pts), cohérence (6 pts), pertinence (6 pts)", methodologie: "Introduction : amorce, présentation, problématique, plan. Développement : paragraphes structurés, connecteurs, exemples. Conclusion : rappel, synthèse, ouverture." },
+    maths: { nom: "Mathématiques", points: 20, criteres: "Démarche (5 pts), calculs (5 pts), rédaction (5 pts), résultat (5 pts)", methodologie: "1. Lire l'énoncé, repérer les données. 2. Choisir la propriété/théorème. 3. Rédiger les calculs étape par étape. 4. Vérifier la cohérence du résultat. 5. Conclure par une phrase." },
+    histoire: { nom: "Histoire-Géo & EMC", points: 20, criteres: "Connaissances (6 pts), analyse (6 pts), argumentation (4 pts), expression (4 pts)", methodologie: "Paragraphe argumenté : 1. Introduction (contexte, problématique). 2. Développement (thèse, arguments, exemples précis). 3. Conclusion (réponse, ouverture)." },
+    sciences: { nom: "Sciences", points: 20, criteres: "Connaissances (6 pts), démarche scientifique (6 pts), rigueur (4 pts), expression (4 pts)", methodologie: "Démarche scientifique : 1. Problématique/hypothèse. 2. Protocole expérimental. 3. Résultats observés. 4. Interprétation/conclusion." }
+  };
+
+  async function callCorrection(texte, matiere) {
+    // Vérification accès
+    if (typeof aAccesComplet !== 'undefined' && !aAccesComplet()) {
+      if (typeof afficherBlocageEssaiExpire !== 'undefined') afficherBlocageEssaiExpire();
+      throw new Error('ACCES_BLOQUE');
+    }
+    const b = baremes[matiere];
+    const prompt = `Tu es correcteur expert du brevet des collèges.
+
+Matière : ${b.nom}
+Barème : ${b.criteres} — BAREME UNIVERSEL : 1/3 bonne réponse + 1/3 rédaction + 1/3 justification.
+Méthodologie attendue : ${b.methodologie}
+
+Texte de l'élève :
+${texte}
+
+Réponds UNIQUEMENT en JSON (sans texte avant ou après) :
+{
+  "note": X,
+  "detail_bareme": "réponse X/3 - rédaction X/3 - justification X/3",
+  "appreciation": "...",
+  "erreurs": ["erreur 1", "erreur 2"],
+  "conseilsMethodologiques": ["conseil 1", "conseil 2"],
+  "versionCorrigee": "..."
+}`;
+
+    try {
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout 45s')), 45000));
+      const payload = JSON.stringify({
+        userId: localStorage.getItem('user_id') || 'anon',
+        action: 'correction_ia', prompt: prompt,
+        system: 'Tu es un correcteur bienveillant et exigeant pour le brevet.',
+        estPayant: typeof isPaid !== 'undefined' ? isPaid() : false,
+        sessionId: sessionStorage.getItem('session_id') || 'sess',
+        joursRestantsEssai: 3, source: 'correcteur-ia', matiere: matiere
+      });
+      const req = fetch('https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec', {
+        method: 'POST',
+        body: new URLSearchParams({ data: payload })
+      }).then(r => r.json()).then(d => {
+        if (d.success && d.content) return d.content;
+        throw new Error(d.error || 'Erreur proxy');
+      });
+      return await Promise.race([req, timeout]);
+    } catch(e) {
+      console.error(e);
+      return "{}";
+    }
+  }
+
+
+  function afficherCorrection(correction, matiere) {
+    const resultDiv = document.getElementById("resultat");
+    try {
+      const json = JSON.parse(correction);
+      const b = baremes[matiere];
+      resultDiv.innerHTML = `
+        <div class="note">📊 Note : ${json.note}/${b.points}</div>
+        <div style="margin: 0.5rem 0;"><strong>👍 Appréciation :</strong> ${json.appreciation || "..."}</div>
+        <hr style="border-color:#333; margin:0.5rem 0;">
+        <strong>⚠️ Erreurs détectées :</strong>
+        <ul>${(json.erreurs || []).map(e => `<li>${e}</li>`).join('') || "<li>Aucune erreur majeure</li>"}</ul>
+        <strong>💡 Conseils méthodologiques (${b.nom}) :</strong>
+        <ul>${(json.conseilsMethodologiques || []).map(c => `<li>${c}</li>`).join('') || "<li>Relisez votre texte à voix haute.</li>"}</ul>
+        <strong>✍️ Version corrigée :</strong><br>
+        <div style="background:#0a0a0f; padding:0.8rem; border-radius:0.8rem; margin-top:0.5rem;">${(json.versionCorrigee || "Non disponible").replace(/\n/g, '<br>')}</div>
+      `;
+    } catch(e) {
+      resultDiv.innerHTML = `<pre style="white-space:pre-wrap;">${correction}</pre>`;
+    }
+    resultDiv.style.display = "block";
+  }
+
+  document.getElementById("corrigerBtn").addEventListener("click", async () => {
+    const texte = document.getElementById("userTexte").value.trim();
+    if (texte === "") { alert("Veuillez écrire un texte à corriger."); return; }
+    const matiere = document.getElementById("matiereSelect").value;
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("resultat").style.display = "none";
+    const correction = await callCorrection(texte, matiere);
+    document.getElementById("loading").style.display = "none";
+    
+    // TRACKER : correction dans l'outil correcteur
+    if (typeof trackAction === 'function') {
+      trackAction('correction_ia', matiere, 'correcteur', null);
+    }
+    
+    afficherCorrection(correction, matiere);
+  });
+
+  document.getElementById("effacerBtn").addEventListener("click", () => {
+    document.getElementById("userTexte").value = "";
+    document.getElementById("resultat").style.display = "none";
+  });
+</script>
+
+</body>
+</html>
