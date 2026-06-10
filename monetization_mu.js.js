@@ -1,16 +1,16 @@
 // ============================================================
 // SMART LEARN — MONÉTISATION MAURICE (v1.0)
-// Essai 2 jours · 990 Rs · WhatsApp + Juice
+// Essai 2 jours · 999 Rs · WhatsApp + Juice
 // Bannière permanente non fermable
 // ============================================================
 
 const MONETIZATION = {
-  prix: 990,
+  prix: 999,
   devise: 'Rs',
   dureeAbonnement: 365,
   essaiJours: 2,
-  whatsapp: 'https://wa.me/23058459402',
-  numeroJuice: '+230 584 59402',
+  whatsapp: 'https://wa.me/23059459402',
+  numeroJuice: '+230 594 59402',
   nomBeneficiaire: 'SMART LEARN',
   STORAGE_KEYS: {
     trialStart:       'brevet_start',
@@ -108,7 +108,7 @@ function creerBanniere() {
 
   var texte = expire
     ? '⚠️ Essai gratuit terminé — Corrections IA bloquées'
-    : '🆓 Essai gratuit — <strong>J-' + j + '</strong> ' + (j <= 1 ? 'jour restant' : 'jours restants') + ' — Accès complet <strong>990 Rs/an</strong>';
+    : '🆓 Essai gratuit — <strong>J-' + j + '</strong> ' + (j <= 1 ? 'jour restant' : 'jours restants') + ' — Accès complet <strong>999 Rs/an</strong>';
 
   banner.innerHTML = '<style>' +
     '#monet-banner{position:sticky;top:0;left:0;right:0;background:' + bg + ';color:' + couleur + ';' +
@@ -182,13 +182,13 @@ function afficherOverlay() {
     '<div style="font-size:44px;margin-bottom:10px;">⏰</div>' +
     '<div class="monet-title">Essai gratuit terminé</div>' +
     '<div class="monet-sub">Débloquez l\'accès complet pour continuer à utiliser le correcteur IA.</div>' +
-    '<div class="monet-price">990 Rs <small>/ an</small></div>' +
+    '<div class="monet-price">999 Rs <small>/ an</small></div>' +
     '<div class="monet-steps">' +
-    '1️⃣ Envoyez <strong>990 Rs</strong> par Juice au <strong>' + MONETIZATION.numeroJuice + '</strong><br>' +
+    '1️⃣ Envoyez <strong>999 Rs</strong> par Juice au <strong>' + MONETIZATION.numeroJuice + '</strong><br>' +
     '2️⃣ Envoyez la <strong>capture du paiement</strong> sur WhatsApp<br>' +
     '3️⃣ Recevez votre <strong>code d\'activation</strong> par retour' +
     '</div>' +
-    '<a href="' + MONETIZATION.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite débloquer Hub Brevet 2026 (990 Rs). Je vous envoie ma capture Juice.') + '" ' +
+    '<a href="' + MONETIZATION.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite débloquer Hub Brevet 2026 (999 Rs). Je vous envoie ma capture Juice.') + '" ' +
     'target="_blank" class="monet-wa-btn">💬 Contacter sur WhatsApp</a>' +
     '<hr class="monet-divider">' +
     '<div style="font-size:12px;color:#9090a8;margin-bottom:10px;">Vous avez déjà reçu un code ?</div>' +
