@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learn — Logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #F4F1EA;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    padding: 40px 20px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: -32px;
+  }
+
+  /* ============ LOGO CARD - DARK ============ */
+  .logo-dark {
+    background: linear-gradient(135deg, #0D1B3E 0%, #1A2F5E 100%);
+    border-radius: 28px;
+    padding: 40px 56px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    box-shadow: 0 20px 60px rgba(13,27,62,0.30), 0 2px 8px rgba(0,0,0,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-dark::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ============ BRAIN SVG ICON ============ */
+  .brain-icon {
+    width: 90px;
+    height: 130px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .brain-icon svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* ============ TEXT BLOCK ============ */
+  .text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .brand-smart {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 58px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 4px;
+    line-height: 1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .brand-separator {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, #C9A84C, #F0C355, #A8732A);
+    margin: 6px 0 5px 0;
+    opacity: 0.7;
+  }
+
+  .brand-learn {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 58px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #C9A84C 0%, #F0C355 50%, #A8732A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 8px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(240,195,85,0.3));
+  }
+
+  .brand-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3.5px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ============ LOGO CARD - LIGHT ============ */
+  .logo-light {
+    background: #FFFFFF;
+    border-radius: 28px;
+    padding: 40px 56px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    box-shadow: 0 8px 40px rgba(13,27,62,0.10), 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid rgba(13,27,62,0.08);
+  }
+
+  .logo-light .brand-smart {
+    color: #0D1B3E;
+  }
+
+  .logo-light .brand-tagline {
+    color: rgba(13,27,62,0.35);
+  }
+
+  /* ============ COMPACT ICON ONLY ============ */
+  .logo-icon-only {
+    background: linear-gradient(135deg, #0D1B3E 0%, #1A2F5E 100%);
+    border-radius: 22px;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(13,27,62,0.35);
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  /* ============ CARDS ROW ============ */
+  .row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ============ ANIMATED GLOW ============ */
+  @keyframes subtleGlow {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(240,195,85,0.25)); }
+    50% { filter: drop-shadow(0 0 14px rgba(240,195,85,0.5)); }
+  }
+
+  .gold-circuit {
+    animation: subtleGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-dark, .logo-light, .logo-icon-only {
+    animation: fadeUp 0.6s ease both;
+  }
+  .logo-light { animation-delay: 0.15s; }
+  .logo-icon-only { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<h2>Version foncée — référence principale</h2>
+
+<!-- DARK VERSION -->
+<div class="logo-dark">
+  <div class="brain-icon">
+    <svg viewBox="0 0 110 160" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#C9A84C"/>
+          <stop offset="50%" stop-color="#F0C355"/>
+          <stop offset="100%" stop-color="#A8732A"/>
+        </linearGradient>
+        <filter id="glow1">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- BRAIN left hemisphere -->
+      <path d="
+        M 58 8
+        C 44 6, 28 14, 20 28
+        C 12 42, 16 54, 10 66
+        C 4 78, 2 88, 6 100
+        C 10 112, 22 118, 26 128
+        C 30 138, 28 150, 38 156
+        C 48 162, 60 158, 66 152
+        C 72 146, 72 138, 72 138
+        L 72 8
+        Z
+      " fill="none" stroke="white" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+
+      <!-- Sulci folds -->
+      <path d="M 58 8 C 68 22, 72 38, 72 56" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" opacity="0.8"/>
+      <path d="M 14 60 C 28 53, 46 56, 58 68" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <path d="M 8 94 C 24 86, 44 90, 56 102" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <path d="M 28 130 C 42 122, 56 126, 64 136" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+
+      <!-- Center divider -->
+      <line x1="72" y1="8" x2="72" y2="152" stroke="white" stroke-width="2" opacity="0.3"/>
+
+      <!-- Center hub dot -->
+      <circle cx="72" cy="80" r="4" fill="url(#g1)" filter="url(#glow1)"/>
+
+      <!-- CIRCUITS (gold + navy) right side -->
+      <!-- Line 1 top - gold -->
+      <g class="gold-circuit">
+        <polyline points="72,30 88,30 100,18" fill="none" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="18" r="5.5" fill="#0D1B3E" stroke="url(#g1)" stroke-width="2.5"/>
+      </g>
+
+      <!-- Line 2 - navy/blue -->
+      <polyline points="72,55 92,55 106,46" fill="none" stroke="#3D5DA8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="106" cy="46" r="5.5" fill="#0D1B3E" stroke="#3D5DA8" stroke-width="2.5"/>
+
+      <!-- Line 3 mid - gold -->
+      <g class="gold-circuit">
+        <polyline points="72,80 108,80" fill="none" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="108" cy="80" r="5.5" fill="#0D1B3E" stroke="url(#g1)" stroke-width="2.5"/>
+      </g>
+
+      <!-- Line 4 - navy/blue -->
+      <polyline points="72,105 92,105 106,114" fill="none" stroke="#3D5DA8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="106" cy="114" r="5.5" fill="#0D1B3E" stroke="#3D5DA8" stroke-width="2.5"/>
+
+      <!-- Line 5 bottom - gold -->
+      <g class="gold-circuit">
+        <polyline points="72,132 88,132 100,144" fill="none" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="144" r="5.5" fill="#0D1B3E" stroke="url(#g1)" stroke-width="2.5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="text-block">
+    <span class="brand-smart">SMART</span>
+    <div class="brand-separator"></div>
+    <span class="brand-learn">LEARN</span>
+    <span class="brand-tagline">Apprendre · Progresser · Exceller</span>
+  </div>
+</div>
+
+<h2>Version claire — usage sur fond blanc</h2>
+
+<!-- LIGHT VERSION -->
+<div class="logo-light">
+  <div class="brain-icon">
+    <svg viewBox="0 0 110 160" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#C9A84C"/>
+          <stop offset="50%" stop-color="#D4A017"/>
+          <stop offset="100%" stop-color="#8B6014"/>
+        </linearGradient>
+      </defs>
+      <path d="M 58 8 C 44 6, 28 14, 20 28 C 12 42, 16 54, 10 66 C 4 78, 2 88, 6 100 C 10 112, 22 118, 26 128 C 30 138, 28 150, 38 156 C 48 162, 60 158, 66 152 C 72 146, 72 138, 72 138 L 72 8 Z"
+        fill="none" stroke="#0D1B3E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 58 8 C 68 22, 72 38, 72 56" fill="none" stroke="#0D1B3E" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <path d="M 14 60 C 28 53, 46 56, 58 68" fill="none" stroke="#0D1B3E" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+      <path d="M 8 94 C 24 86, 44 90, 56 102" fill="none" stroke="#0D1B3E" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+      <path d="M 28 130 C 42 122, 56 126, 64 136" fill="none" stroke="#0D1B3E" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+      <line x1="72" y1="8" x2="72" y2="152" stroke="#0D1B3E" stroke-width="1.5" opacity="0.2"/>
+      <circle cx="72" cy="80" r="4" fill="url(#g2)"/>
+      <polyline points="72,30 88,30 100,18" fill="none" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="100" cy="18" r="5.5" fill="white" stroke="url(#g2)" stroke-width="2.5"/>
+      <polyline points="72,55 92,55 106,46" fill="none" stroke="#2A4A9A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="106" cy="46" r="5.5" fill="white" stroke="#2A4A9A" stroke-width="2.5"/>
+      <polyline points="72,80 108,80" fill="none" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="108" cy="80" r="5.5" fill="white" stroke="url(#g2)" stroke-width="2.5"/>
+      <polyline points="72,105 92,105 106,114" fill="none" stroke="#2A4A9A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="106" cy="114" r="5.5" fill="white" stroke="#2A4A9A" stroke-width="2.5"/>
+      <polyline points="72,132 88,132 100,144" fill="none" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="100" cy="144" r="5.5" fill="white" stroke="url(#g2)" stroke-width="2.5"/>
+    </svg>
+  </div>
+  <div class="text-block">
+    <span class="brand-smart" style="color:#0D1B3E">SMART</span>
+    <div class="brand-separator"></div>
+    <span class="brand-learn">LEARN</span>
+    <span class="brand-tagline" style="color:rgba(13,27,62,0.4)">Apprendre · Progresser · Exceller</span>
+  </div>
+</div>
+
+<h2>Icône seule — app icon / favicon</h2>
+
+<!-- ICON ONLY -->
+<div class="row">
+  <div class="logo-icon-only">
+    <svg viewBox="0 0 110 160" width="52" height="75" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#C9A84C"/>
+          <stop offset="50%" stop-color="#F0C355"/>
+          <stop offset="100%" stop-color="#A8732A"/>
+        </linearGradient>
+      </defs>
+      <path d="M 58 8 C 44 6, 28 14, 20 28 C 12 42, 16 54, 10 66 C 4 78, 2 88, 6 100 C 10 112, 22 118, 26 128 C 30 138, 28 150, 38 156 C 48 162, 60 158, 66 152 C 72 146, 72 138, 72 138 L 72 8 Z"
+        fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 58 8 C 68 22, 72 38, 72 56" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <path d="M 14 60 C 28 53, 46 56, 58 68" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+      <path d="M 8 94 C 24 86, 44 90, 56 102" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+      <circle cx="72" cy="80" r="4" fill="url(#g3)"/>
+      <polyline points="72,30 88,30 100,18" fill="none" stroke="url(#g3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="100" cy="18" r="6" fill="#0D1B3E" stroke="url(#g3)" stroke-width="2.5"/>
+      <polyline points="72,80 108,80" fill="none" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="108" cy="80" r="6" fill="#0D1B3E" stroke="url(#g3)" stroke-width="2.5"/>
+      <polyline points="72,132 88,132 100,144" fill="none" stroke="url(#g3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="100" cy="144" r="6" fill="#0D1B3E" stroke="url(#g3)" stroke-width="2.5"/>
+    </svg>
+  </div>
+</div>
+
+</body>
+</html>
