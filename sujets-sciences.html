@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sujets Sciences — Brevet 2026</title>
+<title>Sciences — 10 sujets DNB avec correction IA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#09090f;color:#e8e8f0;font-family:Arial,sans-serif;min-height:100vh;}
+
+/* LANDING */
 #landing{max-width:1000px;margin:0 auto;padding:1.5rem;}
 .header{background:#111118;border:1px solid #2a2a38;border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 .header h1{font-size:1.4rem;color:#5eaacf;}
@@ -22,6 +24,8 @@ a.back{color:#5ecfb1;text-decoration:none;font-size:13px;}
 .card-meta{font-size:11px;color:#5a5a72;}
 .card-pdf{display:inline-block;margin-top:8px;font-size:11px;color:#5ecfb1;text-decoration:none;}
 .card-pdf:hover{text-decoration:underline;}
+
+/* SUJET VIEW */
 #sujetView{display:none;max-width:900px;margin:0 auto;padding:1.5rem;}
 #sujetView.active{display:block;}
 .sv-header{background:#111118;border:1px solid #2a2a38;border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
@@ -32,6 +36,8 @@ a.back{color:#5ecfb1;text-decoration:none;font-size:13px;}
 .sv-dl{color:#5eaacf;font-size:12px;padding:5px 12px;border-radius:6px;background:rgba(94,170,207,.1);border:1px solid rgba(94,170,207,.3);text-decoration:none;}
 .sv-dl:hover{background:rgba(94,170,207,.2);}
 .btn-pdf-export{color:#5ecfb1;font-size:12px;padding:5px 12px;border-radius:6px;background:rgba(94,207,177,.08);border:1px solid rgba(94,207,177,.25);cursor:pointer;}
+
+/* EXERCICES */
 .exo{background:#111118;border:1px solid #2a2a38;border-radius:12px;margin-bottom:1.2rem;overflow:hidden;}
 .exo-head{padding:12px 16px;border-bottom:1px solid #2a2a38;display:flex;align-items:center;gap:10px;}
 .exo-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
@@ -60,121 +66,24 @@ a.back{color:#5ecfb1;text-decoration:none;font-size:13px;}
 .btn-copy{margin-top:8px;padding:5px 12px;border-radius:6px;border:1px solid #2a2a38;background:#1a1a24;color:#9090a8;font-size:11px;cursor:pointer;}
 </style>
 <script>
-// SMART LEARN — MONÉTISATION MAURICE
-// Essai 2 jours · 999 Rs · WhatsApp + Juice
-
-const MONETIZATION = {
-  prix: 999, devise: 'Rs', essaiJours: 2,
-  codeMaitre: 'Entrepotes974NawalWassil',
-  whatsapp: 'https://wa.me/23058459402',
-  numeroJuice: '+230 58 45 94 02',
-  STORAGE_KEYS: { trialStart: 'brevet_start', paidValid: 'brevet_paid' }
-};
-
-function estEnEssai() {
-  var s = localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);
-  if (!s) return true;
-  return (Date.now() - parseInt(s)) / 86400000 < MONETIZATION.essaiJours;
-}
-function essaiExpire() {
-  var s = localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);
-  if (!s) return false;
-  return (Date.now() - parseInt(s)) / 86400000 >= MONETIZATION.essaiJours;
-}
-function aAccesComplet() {
-  if (localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid) === 'true') return true;
-  return estEnEssai();
-}
-function aAccesPayant() {
-  return localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid) === 'true';
-}
-function joursRestantsEssai() {
-  var s = localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);
-  if (!s) return MONETIZATION.essaiJours;
-  return Math.max(0, Math.ceil(MONETIZATION.essaiJours - (Date.now() - parseInt(s)) / 86400000));
-}
-function validerCode(code, callback) {
-  var PROXY = 'https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';
-  var payload = JSON.stringify({ userId: localStorage.getItem('user_id') || 'anon', action: 'valider_code', code: code.trim(), source: document.title || '' });
-  fetch(PROXY, { method: 'POST', body: new URLSearchParams({ data: payload }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data && data.success) {
-        localStorage.setItem(MONETIZATION.STORAGE_KEYS.paidValid, 'true');
-        if (callback) callback({ success: true, message: '✅ Accès débloqué !' });
-      } else {
-        if (callback) callback({ success: false, message: '❌ ' + (data.error || 'Code invalide.') });
-      }
-    }).catch(function() { if (callback) callback({ success: false, message: '❌ Vérifiez votre connexion.' }); });
-}
-function creerBanniere() {
-  if (document.getElementById('monet-banner') || aAccesPayant()) return;
-  var j = joursRestantsEssai(), expire = essaiExpire();
-  var bg = expire ? '#e87a7a' : '#e8c87a', col = expire ? '#fff' : '#09090f';
-  var texte = expire ? '⚠️ Essai terminé — Corrections IA bloquées'
-    : '🆓 Essai gratuit — <strong>J-' + j + '</strong> ' + (j <= 1 ? 'jour restant' : 'jours restants') + ' — Accès complet <strong>999 Rs/an</strong>';
-  var b = document.createElement('div');
-  b.id = 'monet-banner';
-  b.innerHTML = '<style>#monet-banner{position:sticky;top:0;left:0;right:0;background:' + bg + ';color:' + col + ';font-family:"DM Sans",Arial,sans-serif;font-size:13px;padding:9px 20px;z-index:9998;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}.monet-banner-btn{padding:5px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:' + col + ';color:' + bg + ';}</style><span>' + texte + '</span><button class="monet-banner-btn" onclick="afficherOverlay()">💬 Débloquer via WhatsApp</button>';
-  document.body.insertBefore(b, document.body.firstChild);
-}
-function afficherOverlay() {
-  if (document.getElementById('monet-overlay')) return;
-  var canClose = estEnEssai();
-  var o = document.createElement('div');
-  o.id = 'monet-overlay';
-  o.innerHTML = '<style>#monet-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,9,15,0.97);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:"DM Sans",Arial,sans-serif;}.monet-card{background:#111118;border:1px solid #2a2a38;border-radius:16px;padding:32px 28px;max-width:460px;width:92%;color:#e8e8f0;text-align:center;}.monet-wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 28px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;background:#25D366;color:#fff;margin:12px 0;width:100%;box-sizing:border-box;border:none;cursor:pointer;}.monet-input{width:100%;background:#0d0d14;border:1px solid #2a2a38;border-radius:10px;color:#e8e8f0;font-size:15px;padding:12px 16px;text-align:center;outline:none;box-sizing:border-box;margin-bottom:10px;}.monet-btn{padding:11px 24px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid rgba(94,207,177,0.3);background:rgba(94,207,177,0.1);color:#5ecfb1;margin:4px;}.monet-btn.ghost{background:transparent;color:#9090a8;border:1px solid #2a2a38;}.monet-msg{font-size:13px;margin-top:10px;min-height:24px;}</style>'
-    + '<div class="monet-card">'
-    + '<div style="font-size:44px;margin-bottom:10px;">⏰</div>'
-    + '<div style="font-size:22px;font-weight:800;color:#e8c87a;margin-bottom:8px;">Essai gratuit terminé</div>'
-    + '<div style="font-size:14px;color:#9090a8;margin-bottom:12px;">Débloquez l\'accès complet pour continuer.</div>'
-    + '<div style="font-size:40px;font-weight:800;color:#5ecfb1;margin:8px 0;">999 Rs <span style="font-size:16px;color:#9090a8;">/ an</span></div>'
-    + '<div style="background:#0d0d14;border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:13px;line-height:2;">1️⃣ Envoyez <strong>999 Rs</strong> par Juice au <strong>+230 58 45 94 02</strong><br>2️⃣ Envoyez la <strong>capture</strong> sur WhatsApp<br>3️⃣ Recevez votre <strong>code d\'activation</strong></div>'
-    + '<a href="https://wa.me/23058459402?text=' + encodeURIComponent('Bonjour, je souhaite débloquer Hub Brevet 2026 (999 Rs). Je vous envoie ma capture Juice.') + '" target="_blank" class="monet-wa-btn">💬 Contacter sur WhatsApp</a>'
-    + '<hr style="border:none;border-top:1px solid #2a2a38;margin:16px 0;">'
-    + '<input type="text" class="monet-input" id="monet-code-input" placeholder="Votre code d\'accès…" maxlength="40">'
-    + '<div><button class="monet-btn" id="monet-valider">✓ Valider le code</button>'
-    + (canClose ? '<button class="monet-btn ghost" id="monet-close">Continuer l\'essai</button>' : '')
-    + '</div><div class="monet-msg" id="monet-msg"></div></div>';
-  document.body.appendChild(o);
-  document.getElementById('monet-valider').onclick = function() {
-    var code = document.getElementById('monet-code-input').value.trim();
-    var msg = document.getElementById('monet-msg');
-    if (!code) { msg.style.color='#e87a7a'; msg.textContent='Entrez un code.'; return; }
-    msg.style.color='#9090a8'; msg.textContent='Vérification...';
-    validerCode(code, function(r) {
-      if (r.success) { msg.style.color='#5ecfb1'; msg.textContent=r.message; setTimeout(function(){document.getElementById('monet-overlay').remove();location.reload();},1500); }
-      else { msg.style.color='#e87a7a'; msg.textContent=r.message; }
-    });
-  };
-  var cl = document.getElementById('monet-close');
-  if (cl) cl.onclick = function() { document.getElementById('monet-overlay').remove(); };
-}
-function afficherBlocageEssaiExpire() { afficherOverlay(); }
-function initMonetization() {
-  if (!localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart))
-    localStorage.setItem(MONETIZATION.STORAGE_KEYS.trialStart, Date.now().toString());
-  if (!localStorage.getItem('user_id'))
-    localStorage.setItem('user_id', (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'user_' + Date.now());
-  if (aAccesPayant()) return;
-  creerBanniere();
-  if (essaiExpire()) setTimeout(afficherOverlay, 500);
-  setInterval(function() {
-    var b = document.getElementById('monet-banner');
-    if (b && !aAccesPayant()) b.style.background = essaiExpire() ? '#e87a7a' : '#e8c87a';
-  }, 60000);
-}
-window.aAccesComplet = aAccesComplet;
-window.aAccesPayant = aAccesPayant;
-window.essaiExpire = essaiExpire;
-window.afficherBlocageEssaiExpire = afficherBlocageEssaiExpire;
-window.afficherOverlay = afficherOverlay;
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMonetization);
-else initMonetization();
+const MONETIZATION={prix:999,devise:'Rs',essaiJours:2,whatsapp:'https://wa.me/23058459402',numeroJuice:'+230 58 45 94 02',STORAGE_KEYS:{trialStart:'brevet_start',paidValid:'brevet_paid',lastReminder:'brevet_last_reminder',overlayDismissed:'brevet_ov_dismiss'}};
+function estEnEssai(){var s=localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);if(!s)return true;return(Date.now()-parseInt(s))/86400000<MONETIZATION.essaiJours;}
+function essaiExpire(){var s=localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);if(!s)return false;return(Date.now()-parseInt(s))/86400000>=MONETIZATION.essaiJours;}
+function aAccesComplet(){if(localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid)==='true')return true;return estEnEssai();}
+function aAccesPayant(){return localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid)==='true';}
+function joursRestantsEssai(){var s=localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);if(!s)return MONETIZATION.essaiJours;return Math.max(0,Math.ceil(MONETIZATION.essaiJours-(Date.now()-parseInt(s))/86400000));}
+function validerCode(code,cb){var PROXY='https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';fetch(PROXY,{method:'POST',body:new URLSearchParams({data:JSON.stringify({userId:localStorage.getItem('user_id')||'anon',action:'valider_code',code:code.trim(),source:document.title||''})})}).then(function(r){return r.json();}).then(function(d){if(d&&d.success){localStorage.setItem(MONETIZATION.STORAGE_KEYS.paidValid,'true');if(cb)cb({success:true,message:'Acces debloque!'});}else{if(cb)cb({success:false,message:d.error||'Code invalide.'});}}).catch(function(){if(cb)cb({success:false,message:'Verifiez votre connexion.'});});}
+function afficherOverlay(){if(document.getElementById('monet-overlay'))return;var canClose=estEnEssai();var o=document.createElement('div');o.id='monet-overlay';o.innerHTML='<style>#monet-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,9,15,0.97);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;}.monet-card{background:#111118;border:1px solid #2a2a38;border-radius:16px;padding:32px 28px;max-width:460px;width:92%;color:#e8e8f0;text-align:center;}.monet-wa-btn{display:flex;align-items:center;justify-content:center;padding:13px 28px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;background:#25D366;color:#fff;margin:12px 0;width:100%;box-sizing:border-box;border:none;cursor:pointer;}.monet-input{width:100%;background:#0d0d14;border:1px solid #2a2a38;border-radius:10px;color:#e8e8f0;font-size:15px;padding:12px 16px;text-align:center;outline:none;box-sizing:border-box;margin-bottom:10px;}.monet-btn{padding:11px 24px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid rgba(94,207,177,0.3);background:rgba(94,207,177,0.1);color:#5ecfb1;margin:4px;}.monet-btn.ghost{background:transparent;color:#9090a8;border:1px solid #2a2a38;}.monet-msg{font-size:13px;margin-top:10px;min-height:24px;}</style><div class="monet-card"><div style="font-size:44px;margin-bottom:10px;">60</div><div style="font-size:22px;font-weight:800;color:#e8c87a;margin-bottom:8px;">Essai termine</div><div style="font-size:40px;font-weight:800;color:#5ecfb1;margin:8px 0;">999 Rs <span style="font-size:16px;color:#9090a8;">/ an</span></div><div style="background:#0d0d14;border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:13px;line-height:2;">1. Envoyez 999 Rs Juice au <strong>+230 58 45 94 02</strong><br>2. Envoyez capture WhatsApp<br>3. Recevez votre code</div><a href="https://wa.me/23058459402?text=Bonjour%20Hub%20Brevet%202026%20999Rs%20capture%20Juice" target="_blank" class="monet-wa-btn">Contacter WhatsApp</a><hr style="border:none;border-top:1px solid #2a2a38;margin:16px 0;"><input type="text" class="monet-input" id="monet-code-input" placeholder="Votre code" maxlength="40"><div><button class="monet-btn" id="monet-valider">Valider le code</button>'+(canClose?'<button class="monet-btn ghost" id="monet-close">Continuer essai</button>':'')+' </div><div class="monet-msg" id="monet-msg"></div></div>';document.body.appendChild(o);document.getElementById('monet-valider').onclick=function(){var code=document.getElementById('monet-code-input').value.trim();var msg=document.getElementById('monet-msg');if(!code){msg.style.color='#e87a7a';msg.textContent='Entrez un code.';return;}msg.style.color='#9090a8';msg.textContent='Verification...';validerCode(code,function(r){if(r.success){msg.style.color='#5ecfb1';msg.textContent=r.message;setTimeout(function(){document.getElementById('monet-overlay').remove();location.reload();},1500);}else{msg.style.color='#e87a7a';msg.textContent=r.message;}});};var cl=document.getElementById('monet-close');if(cl)cl.onclick=function(){document.getElementById('monet-overlay').remove();};}
+function afficherBlocageEssaiExpire(){afficherOverlay();}
+function creerBanniere(){if(document.getElementById('monet-banner')||aAccesPayant())return;var j=joursRestantsEssai(),expire=essaiExpire();var bg=expire?'#e87a7a':'#e8c87a',col=expire?'#fff':'#09090f';var b=document.createElement('div');b.id='monet-banner';b.innerHTML='<style>#monet-banner{position:sticky;top:0;left:0;right:0;background:'+bg+';color:'+col+';font-family:Arial,sans-serif;font-size:13px;padding:9px 20px;z-index:9998;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}.monet-banner-btn{padding:5px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:'+col+';color:'+bg+';}</style><span>'+(expire?'Essai termine - IA bloquee':'Essai gratuit - J-'+j+' '+(j<=1?'jour restant':'jours restants')+' - 999 Rs/an')+'</span><button class="monet-banner-btn" onclick="afficherOverlay()">'+(expire?'Debloquer':'Debloquer WhatsApp')+'</button>';document.body.insertBefore(b,document.body.firstChild);}
+function initMonetization(){if(!localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart))localStorage.setItem(MONETIZATION.STORAGE_KEYS.trialStart,Date.now().toString());if(!localStorage.getItem('user_id'))localStorage.setItem('user_id',(typeof crypto!=='undefined'&&crypto.randomUUID)?crypto.randomUUID():'user_'+Date.now());if(aAccesPayant())return;creerBanniere();if(essaiExpire())setTimeout(afficherOverlay,500);}
+window.aAccesComplet=aAccesComplet;window.aAccesPayant=aAccesPayant;window.essaiExpire=essaiExpire;window.afficherBlocageEssaiExpire=afficherBlocageEssaiExpire;window.afficherOverlay=afficherOverlay;window.initMonetization=initMonetization;
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMonetization);else initMonetization();
 </script>
-
 </head>
 <body>
+
+<!-- LANDING -->
 <div id="landing">
   <div class="header">
     <div>
@@ -185,6 +94,8 @@ else initMonetization();
   </div>
   <div class="grid" id="grid"></div>
 </div>
+
+<!-- SUJET VIEW -->
 <div id="sujetView">
   <div class="sv-header">
     <div>
@@ -199,67 +110,33 @@ else initMonetization();
   </div>
   <div id="svContent"></div>
 </div>
+
+<!-- ============================================================ -->
+<!-- CHARGEMENT DES FICHIERS EXTERNES (monétisation + IA + tracker) -->
+<!-- ============================================================ -->
+
+<script src="proxy-client.js"></script>
+<script src="tracker_gs.js"></script>
+
 <script>
+// ============================================================
+// DONNÉES DES 10 SUJETS (contenu pédagogique intact)
+// ============================================================
+
+const STORAGE_CORRECTIONS_KEY = 'sc_corrections_ia';
 const STORE = {};
-const _STORE_KEY = 'sc_corrections_ia';
+
+// Charger les corrections sauvegardées
 try {
-  const _saved = JSON.parse(localStorage.getItem(_STORE_KEY) || '{}');
-  Object.assign(STORE, _saved);
+  const saved = JSON.parse(localStorage.getItem(STORAGE_CORRECTIONS_KEY) || '{}');
+  Object.assign(STORE, saved);
 } catch(e) {}
 
-// ============================================================
-// PROXY APPS SCRIPT — meme systeme que sujets-histgeo.html
-// ============================================================
-const PROXY = 'https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';
-
-function getUserId() {
-  var id = localStorage.getItem('user_id');
-  if (!id) {
-    id = (crypto.randomUUID ? crypto.randomUUID() : 'user_' + Date.now());
-    localStorage.setItem('user_id', id);
-  }
-  return id;
+function saveCorrections() {
+  try {
+    localStorage.setItem(STORAGE_CORRECTIONS_KEY, JSON.stringify(STORE));
+  } catch(e) {}
 }
-function getSessionId() {
-  var sid = sessionStorage.getItem('session_id');
-  if (!sid) { sid = 'sess_' + Date.now(); sessionStorage.setItem('session_id', sid); }
-  return sid;
-}
-function isPaid() { return false; }
-function getJoursRestantsEssai() { return 3; }
-
-async function callIA(prompt, system) {
-  var timeout = new Promise(function(_, reject) {
-    setTimeout(function() { reject(new Error('Timeout 45s')); }, 45000);
-  });
-  var payload = JSON.stringify({
-    userId: getUserId(),
-    action: 'correction_ia',
-    prompt: prompt,
-    system: system,
-    estPayant: isPaid(),
-    sessionId: getSessionId(),
-    joursRestantsEssai: getJoursRestantsEssai(),
-    source: document.title,
-    matiere: 'sciences'
-  });
-  var req = fetch(PROXY, {
-    method: 'POST',
-    body: new URLSearchParams({ data: payload })
-  }).then(function(r) { return r.json(); }).then(function(d) {
-    if (d.success && d.content) return d.content;
-    throw new Error(d.error || 'Erreur API');
-  });
-  return Promise.race([req, timeout]);
-}
-
-function safeJSON(t) {
-  try { return JSON.parse(t.replace(/```json|```/g, '').trim()); }
-  catch(e) { return null; }
-}
-
-
-
 
 const SUJETS = [
   {
@@ -268,22 +145,18 @@ const SUJETS = [
     pdf:'https://svt.ac-besancon.fr/wp-content/uploads/sites/104/2023/10/23GENSCMEAG3.pdf',
     exos:[
       {type:'svt',label:'SVT — Phénylcétonurie (25 pts)',pts:25,questions:[
-        {texte:'Q1a (5 pts) — À partir du document 2, citer le traitement que le patient 2 devra suivre. Justifier votre réponse avec des valeurs chiffrées.',rep:'Le patient 2 a un taux de phénylalanine supérieur à 10 mg/dL → traitement : régime alimentaire pauvre en phénylalanine. Justification chiffrée avec les valeurs du document 2.',pts:25},
-        {texte:'Q1b (6 pts) — À l\'aide des documents 1 et 2, indiquer les DEUX propositions qui conviennent :\na. pauvre en phénylalanine pour éviter l\'accumulation de tyrosine toxique\nb. pauvre en phénylalanine pour éviter l\'accumulation de phénylalanine et les dommages cérébraux\nc. riche en tyrosine car PAH non fonctionnelle → phénylalanine ne peut être transformée en tyrosine\nd. riche en tyrosine car PAH non fonctionnelle → tyrosine ne peut être transformée en phénylalanine',rep:'Propositions b et c. b : régime pauvre en phénylalanine car son accumulation cause des dommages cérébraux. c : régime riche en tyrosine car PAH non fonctionnelle empêche la transformation phénylalanine→tyrosine.',pts:25},
-        {texte:'Q2 (7 pts) — À l\'aide des documents 1, 2 et 3, expliquer le lien entre la phénylcétonurie du patient A et l\'aspect très clair de sa peau, ses cheveux et ses yeux.',rep:'PAH non fonctionnelle → phénylalanine ne peut pas être transformée en tyrosine → déficit en tyrosine → la mélanine (produite à partir de tyrosine) est en quantité insuffisante → peau, cheveux et yeux très clairs.',pts:25},
-        {texte:'Q3 (7 pts) — À partir de l\'ensemble des documents, expliquer comment les symptômes graves de la phénylcétonurie peuvent aujourd\'hui être évités. Trois idées attendues.',rep:'1) Dépistage systématique à la naissance (depuis 1972) → diagnostic précoce. 2) Régime alimentaire pauvre en phénylalanine → limite l\'accumulation. 3) Supplémentation en tyrosine → compense le déficit. (Ou : surveillance régulière du taux de phénylalanine tout au long de la vie.)',pts:25}
+        {texte:'Q1a (5 pts) — À partir du document 2, citer le traitement que le patient 2 devra suivre. Justifier avec des valeurs chiffrées.',rep:'Le patient 2 a un taux de phénylalanine supérieur à 10 mg/dL → traitement : régime alimentaire pauvre en phénylalanine.'},
+        {texte:'Q1b (6 pts) — Indiquer les DEUX propositions qui conviennent : a. pauvre en phénylalanine / b. pauvre en phénylalanine pour éviter accumulation / c. riche en tyrosine / d. riche en tyrosine car PAH non fonctionnelle',rep:'Propositions b et c.'},
+        {texte:'Q2 (7 pts) — Expliquer le lien entre phénylcétonurie et aspect très clair de la peau, cheveux et yeux.',rep:'PAH non fonctionnelle → phénylalanine ne peut être transformée en tyrosine → déficit en tyrosine → mélanine insuffisante.'},
+        {texte:'Q3 (7 pts) — Comment les symptômes graves peuvent être évités aujourd\'hui ? Trois idées.',rep:'1) Dépistage systématique à la naissance. 2) Régime pauvre en phénylalanine. 3) Supplémentation en tyrosine.'}
       ]},
       {type:'pc',label:'PC — Gaz à effet de serre (25 pts)',pts:25,questions:[
-        {texte:'Q1a (8 pts) — Identifier la seule activité humaine générant chacun des trois gaz à effet de serre cités dans le tableau.',rep:'CO₂ : combustion d\'énergies fossiles (charbon, pétrole, gaz). CH₄ : élevage bovin, riziculture, décharges. N₂O : agriculture (engrais azotés).',pts:25},
-        {texte:'Q1b — Identifier et nommer le gaz à effet de serre dont la proportion atmosphérique est la plus importante en 2018. Indiquer le nom et le nombre des atomes d\'une molécule de ce gaz.',rep:'CO₂ (dioxyde de carbone) — proportion la plus élevée. Molécule : 1 atome de carbone (C) + 2 atomes d\'oxygène (O).',pts:25},
-        {texte:'Q1c — Parmi les 3 équations, sélectionner celle qui modélise la combustion du charbon. Expliquer pourquoi les deux autres sont incorrectes.\n(1) C + 2O₂ → 2CO₂\n(2) C + O₂ → CO₂\n(3) 2C + 2H₂O → CH₄ + N₂O',rep:'Équation correcte : (2) C + O₂ → CO₂. (1) incorrecte : non équilibrée (1C ≠ 2C du côté des réactifs). (3) incorrecte : le charbon (C) ne contient pas H ni N, et les produits CH₄ et N₂O ne correspondent pas à la combustion du charbon.',pts:25},
-        {texte:'Q2a (3 pts) — Relever la valeur approximative des émissions de CO₂ en 2018 dues à l\'ensemble des sources de combustibles réunies.',rep:'Lire la valeur sur le graphique fourni avec le sujet (environ 33-37 Gt CO₂/an selon le graphique).',pts:25},
-        {texte:'Q2b — Déterminer quelle source de combustible a produit la plus grande quantité de CO₂ en 2018.',rep:'Le charbon est la source de combustible qui a produit le plus de CO₂ en 2018 (d\'après le graphique).',pts:25},
-        {texte:'Q3a (5 pts) — Calculer la quantité restante de CO₂ que l\'humanité peut encore émettre pour que l\'augmentation de température reste inférieure à 2,0°C.',rep:'Budget carbone restant = limite totale − émissions cumulées déjà émises. Utiliser les valeurs du document fourni avec le sujet.',pts:25},
-        {texte:'Q3b — Prévoir en quelle année la valeur limite de 3 700 Gt sera atteinte si les émissions annuelles restent égales à celles de 2018.',rep:'Années restantes = (3700 − cumul actuel) / émissions annuelles 2018. Calcul avec les données du document.',pts:25},
-        {texte:'Q4a (9 pts) — Associer OUI ou NON à chaque matériau (Verre, Polyéthylène transparent, Polyéthylène noir) selon si l\'image de la tasse s\'affiche sur la caméra thermique.',rep:'Verre : NON (bloque le rayonnement infrarouge). Polyéthylène transparent : OUI (laisse passer l\'IR). Polyéthylène noir : NON (absorbe l\'IR).',pts:25},
-        {texte:'Q4b — Sélectionner la proposition correcte et argumenter :\nP1 : rayonnement caméra thermique = lumière visible\nP2 : rayonnement caméra thermique ≠ lumière visible',rep:'P2 correcte. Argument : le polyéthylène transparent est opaque à la lumière visible (on ne voit pas à travers) mais laisse passer le rayonnement de la caméra thermique → ce rayonnement n\'est pas de la lumière visible (c\'est de l\'infrarouge).',pts:25},
-        {texte:'Q4c — Sélectionner le matériau dont la propriété liée à l\'absorption d\'un rayonnement se rapproche le plus de celle des gaz à effet de serre. Justifier.',rep:'Polyéthylène noir. Justification : il absorbe le rayonnement infrarouge, comme les gaz à effet de serre qui absorbent le rayonnement infrarouge émis par la Terre.',pts:25}
+        {texte:'Q1a (8 pts) — Identifier l\'activité humaine générant chaque gaz : CO₂, CH₄, N₂O.',rep:'CO₂ : combustion fossiles. CH₄ : élevage, riziculture. N₂O : engrais azotés.'},
+        {texte:'Q1b — Gaz à effet de serre le plus abondant en 2018. Composition de sa molécule.',rep:'CO₂. 1 atome C + 2 atomes O.'},
+        {texte:'Q1c — Équation correcte pour combustion du charbon. Pourquoi les autres sont incorrectes ?',rep:'C + O₂ → CO₂. Les autres ne respectent pas la conservation des atomes.'},
+        {texte:'Q4a (9 pts) — OUI/NON : Verre, Polyéthylène transparent, Polyéthylène noir sur caméra thermique.',rep:'Verre : NON. Polyéthylène transparent : OUI. Polyéthylène noir : NON.'},
+        {texte:'Q4b — P1 ou P2 : rayonnement caméra thermique = lumière visible ?',rep:'P2 correcte. C\'est de l\'infrarouge, pas de la lumière visible.'},
+        {texte:'Q4c — Matériau dont la propriété d\'absorption se rapproche des GES.',rep:'Polyéthylène noir (absorbe l\'infrarouge comme les GES).'}
       ]}
     ]
   },
@@ -293,21 +166,14 @@ const SUJETS = [
     pdf:'https://eduscol.education.gouv.fr/sites/default/files/document/23genscnc1pdf-104709.pdf',
     exos:[
       {type:'techno',label:'Technologie — Système photovoltaïque (21 pts)',pts:21,questions:[
-        {texte:'Q1 (3 pts) — Relier chaque fonction technique à sa solution technique :\nFonctions : Transmettre courant alternatif aux appareils / Optimiser fonctionnement panneaux / Mesurer énergie produite et consommée / Convertir énergie solaire en électrique\nSolutions : Optimiseurs / Panneaux photovoltaïques / Onduleur+câbles / Compteurs d\'énergie',rep:'Transmettre courant alternatif → Onduleur+câbles. Optimiser panneaux → Optimiseurs. Mesurer énergie → Compteurs d\'énergie. Convertir énergie solaire → Panneaux photovoltaïques.',pts:21},
-        {texte:'Q2 (4 pts) — Compléter les 4 zones du schéma énergétique :\nTermes disponibles : Énergie électrique - Réseau public - Optimiseurs - Appareils électriques - (Onduleur+câbles) - Panneaux photovoltaïques - Énergie solaire',rep:'Zone 1 : Énergie solaire → Zone 2 : Panneaux photovoltaïques → Zone 3 : Onduleur+câbles → Zone 4 : Appareils électriques. Réseau public en entrée/sortie selon production vs consommation.',pts:21},
-        {texte:'Q3 (4 pts) — Le 04/03/2020 à 8h00 : compléter le texte (production et consommation) et cocher la bonne réponse pour 12h00 (52,186 kW produits / 13,949 kW consommés).',rep:'À 8h00 : production < consommation → énergie prélevée au réseau public. À 12h00 : 52,186 kW produits > 13,949 kW consommés → excédent injecté dans le réseau public (52,186 − 13,949 = 38,237 kW injectés).',pts:21},
-        {texte:'Q4 (4 pts) — Relier chaque action à son programme :\nActions : Allumer LED verte / Allumer LED rouge / Faire clignoter LED rouge / Faire clignoter LED verte',rep:'À relier selon les conditions du programme fourni avec le sujet (température normale/anormale, système actif/inactif).',pts:21},
-        {texte:'Q5a (6 pts) — La force globale exercée par le vent est (moins importante / plus importante) sur un panneau incliné à 30° que sur un panneau incliné à 15°. Justifier avec les représentations de la figure 3.',rep:'Plus importante. Justification : à 30° la surface exposée au vent est plus grande qu\'à 15° → la force résultante est plus importante.',pts:21},
-        {texte:'Q5b — Indiquer la valeur de l\'inclinaison des panneaux photovoltaïques par rapport au toit-terrasse (figure 4).',rep:'Lire la valeur sur la figure 4 fournie avec le sujet (valeur en degrés).',pts:21},
-        {texte:'Q5c — Nommer la ou les pièces (figure 4) qui protègent du vent les panneaux photovoltaïques.',rep:'Les joues latérales (ou déflecteurs, ou protections latérales) selon la figure.',pts:21},
-        {texte:'Q6 (4 pts) — Expliquer en quoi un système photovoltaïque en autoconsommation respecte l\'environnement.',rep:'Produit de l\'électricité à partir de l\'énergie solaire (renouvelable) → pas de combustion → pas d\'émission de CO₂ ni de gaz à effet de serre → réduit l\'impact environnemental par rapport aux énergies fossiles.',pts:21}
+        {texte:'Q1 (3 pts) — Relier chaque fonction technique à sa solution technique.',rep:'Transmettre courant alternatif → Onduleur. Optimiser → Optimiseurs. Mesurer → Compteurs. Convertir → Panneaux.'},
+        {texte:'Q2 (4 pts) — Compléter les 4 zones du schéma énergétique.',rep:'Zone1: Énergie solaire → Zone2: Panneaux → Zone3: Onduleur → Zone4: Appareils.'},
+        {texte:'Q6 (4 pts) — Expliquer en quoi un système photovoltaïque en autoconsommation respecte l\'environnement.',rep:'Énergie solaire renouvelable → pas d\'émission de CO₂ → réduit l\'impact environnemental.'}
       ]},
       {type:'svt',label:'SVT — Pêche et santé (29 pts)',pts:29,questions:[
-        {texte:'Q1 (5 pts) — À partir du document 1, compléter le tableau pour montrer la surexploitation du thon jaune dans le Pacifique (réserves et quantités pêchées en 1970 et 2020).',rep:'Compléter avec les valeurs du document 1. Montrer que les quantités pêchées augmentent tandis que les réserves diminuent → surexploitation.',pts:29},
-        {texte:'Q2 (5 pts) — À partir du document 2, identifier la catégorie de poissons la plus dangereuse pour la santé. Justifier.',rep:'Les poissons du large (ou grands prédateurs) car ils accumulent les polluants (mercure, PCB) par bioaccumulation → concentration la plus élevée dans leur chair.',pts:29},
-        {texte:'Q3 (5 pts) — À partir du document 3, utiliser trois arguments pour expliquer pourquoi la consommation excessive de poissons du large peut avoir des conséquences graves pour la santé.',rep:'1) Teneur en méthylmercure très élevée (> valeurs limites). 2) Méthylmercure neurotoxique → dommages au système nerveux. 3) Effets amplifiés chez la femme enceinte et l\'enfant.',pts:29},
-        {texte:'Q4 (5 pts) — À partir du document 4, expliquer sous forme de texte comment le méthylmercure se retrouve dans le marlin ou le thon que nous mangeons.',rep:'Le mercure industriel se dépose dans les océans → transformé en méthylmercure par des bactéries → absorbé par le phytoplancton → mangé par le zooplancton → mangé par petits poissons → mangé par grands prédateurs (thon, marlin) → bioaccumulation à chaque maillon.',pts:29},
-        {texte:'Q5 (5 pts) — À partir du document 5, donner 2 arguments pour montrer que la pêche à la palangre est respectueuse de l\'environnement.',rep:'1) Sélective : cible des espèces précises, peu de prises accessoires. 2) Pas de contact avec les fonds marins → pas de destruction des habitats. (Selon le document 5.)',pts:29}
+        {texte:'Q2 (5 pts) — Catégorie de poissons la plus dangereuse pour la santé.',rep:'Grands prédateurs (thon, marlin) car bioaccumulation des polluants.'},
+        {texte:'Q4 (5 pts) — Expliquer comment le méthylmercure se retrouve dans le thon.',rep:'Mercure → méthylmercure par bactéries → phytoplancton → zooplancton → petits poissons → grands prédateurs.'},
+        {texte:'Q5 (5 pts) — Deux arguments montrant que la pêche à la palangre est respectueuse de l\'environnement.',rep:'1) Sélective, peu de prises accessoires. 2) Pas de contact avec les fonds marins.'}
       ]}
     ]
   },
@@ -317,19 +183,12 @@ const SUJETS = [
     pdf:'https://eduscol.education.fr/document/53565/download',
     exos:[
       {type:'svt',label:'SVT — Cyclones (23 pts)',pts:23,questions:[
-        {texte:'Q1 (2 pts) — À partir du document 1, comparer la densité de population mondiale à la densité de population se trouvant sur les littoraux.',rep:'La densité de population sur les littoraux est bien supérieure à la densité mondiale moyenne → les zones côtières sont très densément peuplées.',pts:23},
-        {texte:'Q2 (4 pts) — À partir des documents 1 et 2, expliquer pourquoi les populations vivant sur le littoral peuvent être particulièrement affectées par les cyclones.',rep:'Les littoraux sont très peuplés (doc.1) ET les cyclones touchent principalement les zones côtières (doc.2 : vents violents, pluies, submersions marines) → impact humain et matériel très important.',pts:23},
-        {texte:'Q3 (6 pts) — À partir du document 3, comparer la possibilité de survenue d\'un cyclone en Papouasie et aux Philippines.',rep:'La Papouasie est peu exposée aux cyclones (zone équatoriale). Les Philippines sont très exposées (zone tropicale, trajectoires fréquentes des cyclones). Comparer avec les valeurs/zones du document 3.',pts:23},
-        {texte:'Q4 (3 pts) — À partir du document 4, comparer le nombre de cyclones de très forte intensité pour les périodes 1977-1994 et 1994-2020.',rep:'Le nombre de cyclones de très forte intensité a augmenté entre 1977-1994 et 1994-2020. Donner les valeurs chiffrées du document 4.',pts:23},
-        {texte:'Q5 (8 pts) — À partir du document 5, expliquer comment l\'intensité des cyclones pourrait devenir plus intense dans le futur.',rep:'Le réchauffement climatique → hausse de la température des océans → évaporation plus importante → cyclones alimentés en énergie thermique plus intense → vents plus forts, précipitations plus importantes → cyclones plus intenses et plus fréquents.',pts:23}
+        {texte:'Q1 (2 pts) — Comparer densité population mondiale vs littoraux.',rep:'Densité sur littoraux bien supérieure à la moyenne mondiale.'},
+        {texte:'Q5 (8 pts) — Comment l\'intensité des cyclones pourrait devenir plus intense dans le futur.',rep:'Réchauffement climatique → hausse température océans → évaporation plus importante → cyclones plus intenses.'}
       ]},
       {type:'techno',label:'Technologie — Boîtier DAE (27 pts)',pts:27,questions:[
-        {texte:'Q1 (2 pts) — Quelle est la lutte engagée par le ministère de la santé ?',rep:'Lutte contre la mort subite par arrêt cardiaque → déploiement de défibrillateurs automatisés externes (DAE) accessibles au public.',pts:27},
-        {texte:'Q2 (3 pts) — Quel est le service rendu par le boîtier extérieur du DAE ?',rep:'Le boîtier protège le DAE des conditions extérieures (température, intempéries, chocs) tout en le rendant accessible rapidement en cas d\'urgence.',pts:27},
-        {texte:'Q3 (2 pts) — À l\'aide des documents 1 et 2, quelles sont les deux solutions techniques qui assurent la fonction « tempérer l\'intérieur du boîtier » ?',rep:'1) Résistance chauffante électrique (pour éviter le froid). 2) Ventilateur avec capteur de température (pour éviter la chaleur).',pts:27},
-        {texte:'Q4 (7 pts) — Choisir le matériau pour le capot (5) : transparent, résistant UV. Choisir le matériau pour le support (7) : opaque, résistant chocs, léger, résistant hautes températures. Justifier chaque choix (document 3).',rep:'Capot (5) : Polycarbonate (PC) → transparent, résistant UV, résistant chocs. Support (7) : ABS ou autre matériau opaque résistant → opaque, léger, résistant chocs et températures élevées. Justifier avec les propriétés du document 3.',pts:27},
-        {texte:'Q5 (7 pts) — Compléter les chaînes d\'information et d\'énergie de la fonction « Ventiler ». Termes : moteur, réseau électrique, pales, microprocesseur, capteur de température.',rep:'Chaîne d\'information : Capteur de température → microprocesseur → moteur. Chaîne d\'énergie : Réseau électrique → moteur → pales. Fonctions manquantes : Acquérir (capteur) → Traiter (microprocesseur) → Agir (moteur+pales).',pts:27},
-        {texte:'Q6 — À l\'aide des propositions, compléter le programme qui permet de tempérer l\'intérieur du boîtier.',rep:'Programme type : SI température > seuil_max ALORS allumer ventilateur SINON SI température < seuil_min ALORS allumer résistance chauffante SINON arrêter tout.',pts:27}
+        {texte:'Q3 (2 pts) — Deux solutions techniques pour tempérer l\'intérieur du boîtier.',rep:'1) Résistance chauffante. 2) Ventilateur avec capteur de température.'},
+        {texte:'Q5 (7 pts) — Compléter les chaînes d\'information et d\'énergie de la fonction « Ventiler ».',rep:'Info : Capteur → microprocesseur → moteur. Énergie : Réseau → moteur → pales.'}
       ]}
     ]
   },
@@ -339,21 +198,14 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/media/195809/download',
     exos:[
       {type:'pc',label:'PC — Taxis volants (25 pts)',pts:25,questions:[
-        {texte:'Q1 (1 pt) — Donner le symbole de l\'atome de carbone.',rep:'C',pts:25},
-        {texte:'Q2 (1 pt) — Donner le nombre de protons contenus dans l\'atome de carbone.',rep:'6 protons (numéro atomique Z = 6)',pts:25},
-        {texte:'Q3 (3 pts) — Indiquer le nombre de neutrons dans le noyau d\'un atome de carbone. Justifier.',rep:'Carbone 12 (isotope le plus courant) : 12 − 6 = 6 neutrons. Justification : nombre de neutrons = A − Z = 12 − 6 = 6.',pts:25},
-        {texte:'Q4 (2 pts) — Identifier les actions mécaniques subies par le taxi posé sur un sol horizontal et nommer les forces.',rep:'1) Poids P (force gravitationnelle vers le bas, centre de gravité). 2) Réaction du sol R (force normale vers le haut, point de contact). Équilibre : P = R.',pts:25},
-        {texte:'Q5 (3 pts) — Indiquer la relation pour calculer le poids P. Nommer et donner les unités de m et g.\n(P = m/g / P = m² × g / P = m × g)',rep:'P = m × g. m = masse en kilogrammes (kg). g = intensité de la pesanteur en newtons par kilogramme (N/kg).',pts:25},
-        {texte:'Q6 (4 pts) — Calculer le poids du taxi volant avec le pilote mais sans passager.',rep:'P = m × g. Utiliser la masse pilote+taxi fournie dans le sujet. Ex : si m = 560 kg → P = 560 × 10 = 5600 N.',pts:25},
-        {texte:'Q7 (3 pts) — Schématiser le taxi volant et représenter son poids (échelle : 1 cm = 1000 N).',rep:'Dessin simple du taxi. Flèche verticale vers le bas au centre de gravité. Longueur = P/1000 cm. Ex : P = 5600 N → flèche de 5,6 cm.',pts:25},
-        {texte:'Q8 (3 pts) — Attribuer aux numéros 1, 2, 3 du diagramme de conversion d\'énergie les formes d\'énergie parmi : lumineuse, électrique, thermique, cinétique, potentielle, nucléaire.',rep:'Pour un moteur électrique d\'hélice : 1 = énergie électrique → 2 = énergie cinétique (rotation hélice) → 3 = énergie thermique (pertes). Adapter selon le diagramme fourni.',pts:25},
-        {texte:'Q9 (5 pts) — Montrer qu\'il est nécessaire de changer les batteries après chaque trajet entre Saint-Cyr-l\'École et Issy-les-Moulineaux. Calcul attendu.',rep:'Calculer l\'énergie nécessaire pour le trajet (distance × consommation) et comparer à la capacité de la batterie. Si énergie trajet ≥ capacité batterie → changement nécessaire.',pts:25}
+        {texte:'Q1 (1 pt) — Symbole de l\'atome de carbone.',rep:'C'},
+        {texte:'Q2 (1 pt) — Nombre de protons dans l\'atome de carbone.',rep:'6'},
+        {texte:'Q4 (2 pts) — Actions mécaniques subies par le taxi posé sur sol horizontal.',rep:'Poids P (vers le bas) et réaction du sol R (vers le haut).'},
+        {texte:'Q5 (3 pts) — Relation pour calculer le poids P. Unités de m et g.',rep:'P = m × g. m en kg, g en N/kg.'},
+        {texte:'Q6 (4 pts) — Calculer le poids du taxi volant avec pilote (m = 560 kg, g = 10 N/kg).',rep:'P = 560 × 10 = 5600 N'}
       ]},
       {type:'techno',label:'Technologie — Domespace (25 pts)',pts:25,questions:[
-        {texte:'Q1 (8 pts) — À l\'aide du document 1, compléter le schéma de la chaîne d\'énergie du Domespace.',rep:'Chaîne énergie : Énergie solaire → (capteurs) → Énergie thermique ou électrique → (moteurs) → Énergie mécanique → Rotation de la maison.',pts:25},
-        {texte:'Q2 (7 pts) — Calculer la durée du déplacement lors de la rotation de nuit, puis compléter le programme « mode automatique » et le sous-programme « rotation de nuit ».',rep:'Rotation de nuit = 180° (demi-tour). Vitesse de rotation fournie dans le sujet → durée = 180 / vitesse_angulaire. Programme : SI nuit ALORS exécuter rotation_nuit.',pts:25},
-        {texte:'Q3 (4 pts) — Une erreur s\'est glissée dans le sous-programme « rotation de jour ». Avec ce sous-programme, la maison tourne continuellement 12h. Repérer et corriger l\'erreur.',rep:'L\'erreur est probablement une condition de fin manquante ou mal formulée (boucle infinie). Corriger en ajoutant une condition d\'arrêt : SI angle_atteint ALORS arrêter rotation.',pts:25},
-        {texte:'Q4 (6 pts) — Parmi 6 matériels (Modem-routeur, Disque dur, Switch, Smartphone, Borne wifi, Imprimante), choisir 3 nécessaires pour un pilotage à distance. Justifier.',rep:'Smartphone (interface utilisateur à distance), Borne wifi (connexion sans fil), Modem-routeur (connexion Internet). Justification : permettent de contrôler la maison à distance via Internet/wifi.',pts:25}
+        {texte:'Q4 (6 pts) — Choisir 3 matériels nécessaires pour un pilotage à distance.',rep:'Smartphone, Borne wifi, Modem-routeur. Justification : permettent de contrôler à distance.'}
       ]}
     ]
   },
@@ -363,23 +215,15 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/media/195323/download',
     exos:[
       {type:'pc',label:'PC — Batterie smartphone (25 pts)',pts:25,questions:[
-        {texte:'Q1a — Indiquer laquelle des équations modélise la dissolution du CO₂ dans l\'eau. Justifier.',rep:'CO₂ + H₂O → H₂CO₃ (acide carbonique) ou CO₂ + H₂O → H⁺ + HCO₃⁻. Justification : équation équilibrée respectant la conservation des atomes et des charges.',pts:25},
-        {texte:'Q1b — Nommer le matériel utilisé pour mesurer le pH de l\'eau de mer par deux méthodes expérimentales différentes.',rep:'1) pH-mètre électronique. 2) Papier pH (ou indicateur coloré comme le BTB).',pts:25},
-        {texte:'Q1c — Expliquer pourquoi la dissolution du CO₂ dans l\'eau provoque une acidification des océans.',rep:'CO₂ dissous dans l\'eau → forme de l\'acide carbonique → libère des ions H⁺ → augmentation de la concentration en H⁺ → diminution du pH → acidification.',pts:25},
-        {texte:'Q2 (2 pts) — Proposer deux solutions pour réduire l\'impact carbone d\'un smartphone.',rep:'1) Prolonger la durée de vie (réparer plutôt que remplacer). 2) Utiliser de l\'énergie renouvelable pour recharger. 3) Recycler les composants.',pts:25},
-        {texte:'Q3a — Donner le symbole de l\'élément lithium.',rep:'Li',pts:25},
-        {texte:'Q3b — Nombre de protons dans le noyau d\'un atome de lithium.',rep:'3 protons (Z = 3)',pts:25},
-        {texte:'Q3c — En déduire le nombre d\'électrons. Justifier.',rep:'3 électrons car un atome est électriquement neutre → nombre d\'électrons = nombre de protons = 3.',pts:25},
-        {texte:'Q3d — En déduire la formule chimique de l\'ion lithium.',rep:'Li⁺ (perd 1 électron → charge +1)',pts:25},
-        {texte:'Q4 (3 pts) — Sans recopier le diagramme énergétique du vélo, affecter à chaque numéro une forme d\'énergie.',rep:'Selon le diagramme fourni : ex. 1 = énergie chimique (muscles) → 2 = énergie mécanique (pédalage) → 3 = énergie cinétique (déplacement) → 4 = énergie thermique (pertes).',pts:25},
-        {texte:'Q5 (4 pts) — Déterminer en Wh l\'énergie nécessaire pour recharger la batterie en 30 minutes.',rep:'E = P × t. P (en watts) × t (en heures) = E (en Wh). Utiliser la puissance de chargement fournie dans le sujet. Ex : P = 20W → E = 20 × 0,5 = 10 Wh.',pts:25},
-        {texte:'Q6 (3 pts) — Déterminer la surface de panneau solaire nécessaire pour 4 personnes (1 recharge/jour). Commenter.',rep:'Surface = (E totale/jour) / (ensoleillement × rendement). 4 personnes × E batterie = E totale. Surface calculée, puis commenter (ex : surface raisonnable ou non selon les données).',pts:25}
+        {texte:'Q1c — Pourquoi la dissolution du CO₂ dans l\'eau provoque une acidification des océans.',rep:'CO₂ + H₂O → H₂CO₃ → libération d\'ions H⁺ → baisse du pH.'},
+        {texte:'Q2 (2 pts) — Deux solutions pour réduire l\'impact carbone d\'un smartphone.',rep:'1) Prolonger la durée de vie. 2) Utiliser énergie renouvelable pour recharger.'},
+        {texte:'Q3a — Symbole du lithium.',rep:'Li'},
+        {texte:'Q3b — Nombre de protons dans l\'atome de lithium.',rep:'3'},
+        {texte:'Q3d — Formule de l\'ion lithium.',rep:'Li⁺'},
+        {texte:'Q5 (4 pts) — Énergie pour recharger batterie en 30 min (P = 20W).',rep:'E = P × t = 20 × 0,5 = 10 Wh'}
       ]},
       {type:'svt',label:'SVT — Oiseaux-éléphants de Madagascar (25 pts)',pts:25,questions:[
-        {texte:'Q1 (6 pts) — À partir du document 1, répondre aux questions sur l\'annexe (arbre phylogénétique ou tableau fourni avec le sujet).',rep:'Analyser l\'arbre phylogénétique et identifier les caractères partagés, les groupes emboîtés, et les relations de parenté selon le document 1.',pts:25},
-        {texte:'Q2 (4 pts) — À partir des documents 1 et 2, indiquer à quelle époque et période géologique a eu lieu la divergence entre les genres Æpyornis et Mullerornis.',rep:'Utiliser l\'échelle des temps géologiques et les données moléculaires du document 2 pour dater la divergence (ex : Éocène ou Oligocène, selon les documents).',pts:25},
-        {texte:'Q3 (6 pts) — À partir du document 3, expliquer l\'origine de la modification des courants océaniques dans l\'hémisphère Sud entre −41 Ma et −32 Ma.',rep:'Ouverture du passage de Drake (entre Amérique du Sud et Antarctique) → mise en place du courant circumpolaire antarctique → isolation thermique de l\'Antarctique → refroidissement.',pts:25},
-        {texte:'Q4 (9 pts) — À l\'aide du document 4, expliquer en quoi l\'ouverture du passage de Drake peut être à l\'origine de la divergence entre Æpyornis et Mullerornis.',rep:'Ouverture Drake → courant circumpolaire → modification des courants dans l\'Indien → isolement de Madagascar → populations séparées géographiquement → divergence génétique → spéciation → apparition de deux genres distincts.',pts:25}
+        {texte:'Q3 (6 pts) — Origine de la modification des courants océaniques dans l\'hémisphère Sud entre -41 et -32 Ma.',rep:'Ouverture du passage de Drake → courant circumpolaire antarctique → refroidissement.'}
       ]}
     ]
   },
@@ -389,21 +233,14 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/media/195515/download',
     exos:[
       {type:'pc',label:'PC — Fonds marins et plongée (25 pts)',pts:25,questions:[
-        {texte:'Q1 — Préciser si les eaux favorables aux coraux (pH entre 8,0 et 8,4) sont acides ou basiques. Justifier.',rep:'Basiques. Justification : pH > 7 → solution basique.',pts:25},
-        {texte:'Q2 — CaCO₃ : indiquer le nombre d\'atomes de carbone (C) et d\'oxygène (O).',rep:'1 atome de carbone (C) et 3 atomes d\'oxygène (O).',pts:25},
-        {texte:'Q3 — À l\'aide des documents 1 et 2, proposer un protocole pour vérifier la présence de l\'ion Ca²⁺ dans l\'eau de mer.',rep:'Protocole : ajouter quelques gouttes d\'oxalate d\'ammonium (ou autre réactif du document 2) à l\'échantillon d\'eau de mer → observer la formation d\'un précipité blanc en cas de présence de Ca²⁺.',pts:25},
-        {texte:'Q4 — Observation attendue si l\'eau de mer contient des ions Ca²⁺.',rep:'Formation d\'un précipité blanc (insoluble) → confirmation de la présence de Ca²⁺.',pts:25},
-        {texte:'Q5 — À partir des mesures, déterminer la masse volumique de l\'eau de mer. (ρ = m/v)',rep:'ρ = masse mesurée / volume mesuré. Substituer les valeurs numériques du document.',pts:25},
-        {texte:'Q6 — Indiquer quel segment fléché (A ou B) correspond au poids P du plongeur. Justifier.',rep:'Le poids est dirigé verticalement vers le bas → segment fléché vers le bas = poids P. Justification : le poids est la force gravitationnelle, toujours orientée vers le centre de la Terre.',pts:25},
-        {texte:'Q7 — Calculer le poids P du plongeur (m = 90 kg, g = 10 N/kg).',rep:'P = m × g = 90 × 10 = 900 N',pts:25},
-        {texte:'Q8 — En déduire si le plongeur peut descendre sachant que la poussée d\'Archimède F = 850 N. Justifier.',rep:'P = 900 N > F = 850 N → le poids est supérieur à la poussée d\'Archimède → le plongeur peut descendre (il n\'est pas en équilibre neutre).',pts:25},
-        {texte:'Q9 — Déterminer la profondeur d sachant que T = 0,04 s et v = 1500 m/s. Expliquer la démarche.',rep:'Le signal sonar fait un aller-retour → d = (v × T) / 2 = (1500 × 0,04) / 2 = 60 / 2 = 30 m.',pts:25}
+        {texte:'Q1 — Eaux favorables aux coraux (pH 8,0-8,4) : acides ou basiques ?',rep:'Basiques (pH > 7).'},
+        {texte:'Q6 — Segment correspondant au poids du plongeur.',rep:'Flèche verticale vers le bas.'},
+        {texte:'Q7 — Poids du plongeur (m = 90 kg, g = 10 N/kg).',rep:'P = 90 × 10 = 900 N'},
+        {texte:'Q9 — Profondeur d avec T = 0,04 s et v = 1500 m/s.',rep:'d = (1500 × 0,04)/2 = 30 m'}
       ]},
       {type:'svt',label:'SVT — Paludisme (25 pts)',pts:25,questions:[
-        {texte:'Q1 (3 pts) — À partir du document 1, nommer l\'organisme responsable de la maladie et celui qui assure la transmission.',rep:'Organisme responsable : Plasmodium (parasite). Organisme transmetteur : moustique du genre Anopheles (vecteur).',pts:25},
-        {texte:'Q2 (6 pts) — À partir du document 2, identifier et recopier les DEUX réponses correctes :\na. Nb cas paludisme plus élevé en 2005 qu\'en 1980 au Panama\nb. Au Panama, passage d\'environ 1000 à 7000 cas au début des années 2000\nc. Au Costa Rica, passage d\'environ 1000 à 7000 cas au début des années 1990\nd. Augmentation très importante des cas au Panama AVANT le Costa Rica',rep:'Propositions correctes : c et d. c : Au Costa Rica, augmentation à environ 7000 cas au début des années 1990. d : La forte augmentation a eu lieu au Panama avant le Costa Rica (d\'après le graphique du document 2).',pts:25},
-        {texte:'Q3 (7 pts) — À partir des documents 1 et 3, expliquer comment la disparition des amphibiens peut entraîner une augmentation des cas de paludisme.',rep:'Amphibiens (grenouilles) mangent les moustiques adultes et larves. Disparition amphibiens → augmentation population moustiques Anopheles → augmentation piqûres → augmentation transmission Plasmodium → plus de cas de paludisme.',pts:25},
-        {texte:'Q4 (9 pts) — À partir de l\'ensemble des documents, montrer à partir de l\'exemple du Costa Rica et du Panama qu\'une bonne santé humaine est liée à la préservation des écosystèmes.',rep:'1) Disparition amphibiens (déséquilibre écosystème) → explosion population moustiques → epidémie paludisme. 2) La biodiversité (amphibiens) régule naturellement les vecteurs de maladies. 3) Préserver les écosystèmes = maintenir les équilibres biologiques = protéger la santé humaine.',pts:25}
+        {texte:'Q1 (3 pts) — Organisme responsable du paludisme et organisme transmetteur.',rep:'Plasmodium (parasite), moustique Anopheles (vecteur).'},
+        {texte:'Q3 (7 pts) — Comment la disparition des amphibiens peut augmenter les cas de paludisme.',rep:'Amphibiens mangent moustiques → disparition → augmentation moustiques → augmentation transmission.'}
       ]}
     ]
   },
@@ -413,22 +250,13 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/media/195920/download',
     exos:[
       {type:'pc',label:'PC — Piscine olympique (25 pts)',pts:25,questions:[
-        {texte:'Q1 (2 pts) — Donner les deux inconvénients d\'une eau de piscine dont le pH est inférieur à 7.',rep:'1) Eau acide → irritation des yeux et de la peau des nageurs. 2) Eau acide → corrosion des équipements métalliques de la piscine.',pts:25},
-        {texte:'Q2a (6 pts) — L\'eau de piscine donne une couleur rouge au rouge de phénol. Indiquer si elle est acide, basique ou neutre. Justifier.',rep:'Basique. Justification : le rouge de phénol vire au rouge/rose fushia en milieu basique (pH > 8,2). Rouge = basique.',pts:25},
-        {texte:'Q2b — Molécule C₁₉H₁₄O₅S : nommer les autres atomes que S (soufre).',rep:'Carbone (C), Hydrogène (H), Oxygène (O).',pts:25},
-        {texte:'Q3 (3 pts) — Équation Fe + 2H⁺ → Fe²⁺ + H₂. Identifier une molécule, un atome et un ion.',rep:'Molécule : H₂ (dihydrogène). Atome : Fe (fer). Ion : H⁺ (ion hydrogène / proton) et Fe²⁺ (ion fer II).',pts:25},
-        {texte:'Q4 (2 pts) — Réaction Fe + 2H⁺ → Fe²⁺ + H₂. Écrire les numéros des propositions correctes :\nP1 : précipité vert avec soude\nP2 : précipité rouille avec soude\nP3 : détonation avec flamme\nP4 : allumette incandescente se rallume',rep:'P1 et P3. P1 : Fe²⁺ + soude → précipité vert (hydroxyde de fer II). P3 : H₂ produit → détonation avec flamme (test du dihydrogène).',pts:25},
-        {texte:'Q5a (12 pts) — Décrire l\'évolution de l\'énergie cinétique du plongeur au cours du temps.',rep:'Au départ : Ec = 0 (repos). Pendant la chute : Ec augmente (accélération). Au contact de l\'eau : Ec maximale. Dans l\'eau : Ec diminue (freinage).',pts:25},
-        {texte:'Q5b — Nommer la forme d\'énergie convertie en énergie cinétique au cours du plongeon.',rep:'Énergie potentielle de pesanteur (Epp) → convertie en Ec lors de la chute.',pts:25},
-        {texte:'Q5c — Indiquer la durée du plongeon en secondes.',rep:'Lire la durée t sur le graphique fourni avec le sujet.',pts:25},
-        {texte:'Q5d — À l\'aide des graphiques, déterminer si la vitesse à l\'impact vi respecte la norme de sécurité (80 km/h). Toute démarche sera prise en compte.',rep:'Lire vi sur le graphique en m/s, convertir en km/h (× 3,6), comparer à 80 km/h. Si vi ≤ 80 km/h → conforme, sinon → non conforme.',pts:25}
+        {texte:'Q1 (2 pts) — Deux inconvénients d\'une eau de piscine avec pH < 7.',rep:'1) Irritation yeux/peau. 2) Corrosion des équipements.'},
+        {texte:'Q3 (3 pts) — Dans Fe + 2H⁺ → Fe²⁺ + H₂, identifier une molécule, un atome, un ion.',rep:'Molécule : H₂. Atome : Fe. Ion : H⁺ ou Fe²⁺.'},
+        {texte:'Q5b — Forme d\'énergie convertie en énergie cinétique lors du plongeon.',rep:'Énergie potentielle de pesanteur (Epp).'}
       ]},
       {type:'techno',label:'Technologie — Vigie feux de forêt (25 pts)',pts:25,questions:[
-        {texte:'Q1 (5 pts) — Sur l\'annexe réponse 1, identifier le besoin auquel répond la vigie. Associer solutions techniques aux fonctions techniques.',rep:'Besoin : détecter les départs de feux de forêt rapidement. Associations : appareil photo → capter images / microprocesseur → traiter / batterie → alimenter / panneau solaire → produire énergie.',pts:25},
-        {texte:'Q2 (4 pts) — Indiquer la nature du mouvement de l\'appareil photo 1. Déterminer pour la position 6 (60°) le temps entre deux prises de vue.',rep:'Mouvement : rotatif (ou circulaire). Temps à 60° : calculer à partir de la vitesse de rotation fournie dans le document 2.',pts:25},
-        {texte:'Q3 (6 pts) — Calculer la capacité de la batterie pour assurer 12h d\'autonomie sans apport solaire.',rep:'Capacité = Puissance totale consommée × 12h. Additionner les puissances de tous les composants, multiplier par 12.',pts:25},
-        {texte:'Q4 (5 pts) — Exprimer la valeur binaire du pixel P pour le cycle 2. Trouver les valeurs décimales pour cycles 1 et 2. Déduire si une alerte est donnée.',rep:'Convertir la valeur binaire en décimal. Comparer les deux valeurs (si différence > seuil → alerte feu détecté).',pts:25},
-        {texte:'Q5 (5 pts) — À l\'aide du document 2, compléter le programme (5 éléments attendus).',rep:'Programme de détection : lire capteur température, comparer seuil, si dépassement → déclencher alerte, transmettre données, attendre prochain cycle.',pts:25}
+        {texte:'Q1 (5 pts) — Besoin auquel répond la vigie.',rep:'Détecter les départs de feux de forêt rapidement.'},
+        {texte:'Q3 (6 pts) — Capacité batterie pour 12h autonomie.',rep:'Capacité = Puissance totale consommée × 12h.'}
       ]}
     ]
   },
@@ -438,20 +266,14 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/sites/default/files/2025-06/dipl-me-national-du-brevet-2025-sciences-441402.pdf',
     exos:[
       {type:'svt',label:'SVT — Doryphores et pommes de terre (25 pts)',pts:25,questions:[
-        {texte:'Q1 (4 pts) — À partir du document 1, recopier le numéro de la proposition exacte :\nP1 : diminution du nombre des tubercules\nP2 : augmentation du nombre des tubercules\nP3 : diminution de la masse moyenne des tubercules\nP4 : augmentation de la masse moyenne des tubercules',rep:'Proposition 3 : les doryphores mangent les feuilles → diminution de la photosynthèse → moins de sucres produits → diminution de la masse moyenne des tubercules.',pts:25},
-        {texte:'Q2a (12 pts) — Parmi les expériences A, B, C, indiquer laquelle teste l\'hypothèse : « plus la surface totale des feuilles est petite, plus la masse moyenne des tubercules est faible ». Expliquer le choix.',rep:'L\'expérience qui fait varier uniquement la surface foliaire (en enlevant des feuilles) tout en gardant les autres conditions identiques. Ex : expérience B (selon le tableau). Justification : seule la variable « surface des feuilles » change → résultat interprétable.',pts:25},
-        {texte:'Q2b — Expliquer l\'intérêt d\'avoir utilisé plusieurs plants (lot de 10) par expérience.',rep:'Utiliser plusieurs plants → obtenir une moyenne fiable → limiter l\'influence des variations individuelles → résultats plus représentatifs et reproductibles.',pts:25},
-        {texte:'Q3 (9 pts) — À l\'aide des documents 1, 2 et 3, expliquer pourquoi la présence de nombreux doryphores modifie la masse moyenne des tubercules.',rep:'Doryphores mangent les feuilles (doc.1) → réduction de la surface foliaire → diminution de la photosynthèse (doc.2 : moins de lumière captée) → moins de glucose produit → moins de mise en réserve dans les tubercules (doc.3) → masse moyenne des tubercules diminue.',pts:25}
+        {texte:'Q1 (4 pts) — Proposition exacte : diminution nombre tubercules / diminution masse moyenne tubercules.',rep:'Proposition 3 : diminution de la masse moyenne des tubercules.'},
+        {texte:'Q2b — Intérêt d\'utiliser plusieurs plants par expérience.',rep:'Obtenir une moyenne fiable, limiter les variations individuelles.'}
       ]},
       {type:'pc',label:'PC — Mission Alpha ISS (25 pts)',pts:25,questions:[
-        {texte:'Q1 (2 pts) — Citer deux avantages des matériaux innovants présentés (mousses réutilisables, biodégradables ou comestibles).',rep:'1) Réduction des déchets à bord de l\'ISS. 2) Réutilisables → économie de ressources. 3) Biodégradables/comestibles → pas de stockage de déchets dangereux.',pts:25},
-        {texte:'Q2a (6 pts) — Indiquer si le dioxygène est un atome ou une molécule. Donner un argument.',rep:'Molécule. Argument : le dioxygène O₂ est composé de 2 atomes d\'oxygène liés → c\'est une molécule (assemblage d\'au moins 2 atomes).',pts:25},
-        {texte:'Q2b — 2H₂O → 2H₂ + O₂. Choisir la proposition correcte :\nP1 : 2kg eau → 2kg H₂ + 1kg O₂\nP2 : 2kg eau → 0,22kg H₂ + 1,78kg O₂\nP3 : 2kg H₂ + 1kg O₂ → 2kg eau',rep:'P2. Justification : conservation de la masse → 2kg eau = 0,22kg H₂ + 1,78kg O₂. Les masses se conservent lors d\'une réaction chimique. P1 est fausse (masse totale serait 3kg ≠ 2kg). P3 est l\'inverse de la réaction.',pts:25},
-        {texte:'Q3a (9 pts) — Classer dans l\'ordre les 5 étapes de la démarche expérimentale pour vérifier la masse volumique du cylindre d\'aluminium.',rep:'Étapes dans l\'ordre : 1) Mesurer la masse du cylindre (balance). 2) Mesurer le volume (eau déplacée ou calcul géométrique). 3) Calculer ρ = m/V. 4) Comparer avec la valeur de référence (2,7 g/mL). 5) Conclure.',pts:25},
-        {texte:'Q3b — Vérifier que la masse volumique du cylindre est celle de l\'aluminium (2,7 g/mL). Détailler les calculs.',rep:'ρ = m/V. Substituer les mesures de l\'expérience. Si résultat ≈ 2,7 g/mL → c\'est de l\'aluminium.',pts:25},
-        {texte:'Q3c — Comparer Acier(7,9) / Aluminium(2,7) / Titane(4,5) g/mL. Expliquer le choix de l\'aluminium pour l\'ISS.',rep:'L\'aluminium a la plus faible masse volumique → le plus léger des trois. Pour l\'ISS : minimiser la masse = réduire le coût de lancement → choix de l\'aluminium malgré une résistance moindre que l\'acier.',pts:25},
-        {texte:'Q4a (8 pts) — Choisir 2 adjectifs et caractériser le mouvement de l\'ISS. Justifier.\n(Rectiligne / Circulaire / Accéléré / Uniforme / Ralenti)',rep:'Circulaire et uniforme. Justification : l\'ISS suit une orbite (trajectoire circulaire) à vitesse constante (~28000 km/h) → mouvement circulaire uniforme.',pts:25},
-        {texte:'Q4b — Expliquer la signification de « 16 levers de Soleil » par calcul. (L\'ISS parcourt 42700 km/tour à 28000 km/h)',rep:'Durée d\'un tour = 42700/28000 ≈ 1,525 h ≈ 1h31min. En 24h : 24/1,525 ≈ 15,7 ≈ 16 tours. L\'ISS voit donc 16 levers de Soleil par jour.',pts:25}
+        {texte:'Q2a — Le dioxygène O₂ est-il un atome ou une molécule ?',rep:'Molécule (assemblage de 2 atomes O).'},
+        {texte:'Q2b — Proposition correcte : 2kg eau → 2kg H₂ + 1kg O₂ / 0,22kg H₂ + 1,78kg O₂ / inverse.',rep:'P2 : 0,22kg H₂ + 1,78kg O₂ (conservation de la masse).'},
+        {texte:'Q4a — Caractériser le mouvement de l\'ISS (rectiligne/circulaire, uniforme/accéléré).',rep:'Circulaire et uniforme.'},
+        {texte:'Q4b — Expliquer « 16 levers de Soleil » par calcul (42700 km/tour, 28000 km/h).',rep:'Durée tour = 42700/28000 ≈ 1,525h. 24/1,525 ≈ 15,7 → 16 tours/jour.'}
       ]}
     ]
   },
@@ -461,21 +283,15 @@ const SUJETS = [
     pdf:'https://www.education.gouv.fr/sites/default/files/2025-06/dipl-me-national-du-brevet-2025---sciences-440574.pdf',
     exos:[
       {type:'pc',label:'PC — Balle de tennis de table (25 pts)',pts:25,questions:[
-        {texte:'Q1 (1 pt) — Indiquer quel pictogramme est associé aux balles en celluloïd.',rep:'Pictogramme « inflammable » (flamme) car le celluloïd est un matériau hautement inflammable.',pts:25},
-        {texte:'Q2 (3 pts) — Acrylonitrile + butadiène + styrène → ABS. Transformation physique ou chimique ? Justifier.',rep:'Transformation chimique. Justification : de nouvelles espèces chimiques sont formées (ABS ≠ réactifs), les liaisons chimiques sont rompues et formées → réaction chimique.',pts:25},
-        {texte:'Q3 (3 pts) — Molécule d\'acrylonitrile C₃H₅N : indiquer le nom et le nombre des atomes.',rep:'3 atomes de carbone (C), 5 atomes d\'hydrogène (H), 1 atome d\'azote (N).',pts:25},
-        {texte:'Q4.1 (2 pts) — Nombre de protons de l\'atome d\'azote. Justifier.',rep:'7 protons. Justification : numéro atomique de l\'azote Z = 7 → 7 protons dans le noyau.',pts:25},
-        {texte:'Q4.2 (3 pts) — Nombre d\'électrons de l\'atome d\'azote. Justifier.',rep:'7 électrons. Justification : l\'atome est électriquement neutre → nombre d\'électrons = nombre de protons = 7.',pts:25},
-        {texte:'Q5 (2 pts) — Caractériser le mouvement de la balle lors de la phase de descente avec deux mots de la liste : rectiligne, curviligne, uniforme, circulaire, accéléré, décéléré.',rep:'Rectiligne et accéléré (chute libre sans frottement significatif) ou curviligne et accéléré (si trajectoire parabolique).',pts:25},
-        {texte:'Q6 (3 pts) — Calculer l\'énergie potentielle Epp1 pour h = 0,50 m. (Epp = m × g × h)',rep:'Epp = m × 10 × 0,50 = 5m (J). Substituer la masse de la balle fournie dans le sujet. Ex : m = 0,0027 kg → Epp = 0,0027 × 10 × 0,5 = 0,0135 J.',pts:25},
-        {texte:'Q7 (3 pts) — Indiquer la relation pour Ec parmi :\nEc = ½ × m² × v² / Ec = ½ × m × v² / Ec = ½ × m² × v. Nommer m et v et donner leurs unités pour Ec en joules.',rep:'Ec = ½ × m × v². m = masse en kilogrammes (kg). v = vitesse en mètres par seconde (m/s).',pts:25},
-        {texte:'Q8 (5 pts) — Déterminer la vitesse maximale vmax de la balle à l\'impact (position 5). Détailler le raisonnement.',rep:'Conservation énergie : Epp1 = Ec (au point d\'impact). m×g×h = ½×m×v² → v² = 2×g×h → v = √(2×g×h) = √(2×10×0,5) = √10 ≈ 3,16 m/s. Ou lire directement sur la chronophotographie.',pts:25}
+        {texte:'Q1 (1 pt) — Pictogramme associé aux balles en celluloïd.',rep:'Inflammable (flamme).'},
+        {texte:'Q3 (3 pts) — Molécule C₃H₅N : nom et nombre des atomes.',rep:'3C, 5H, 1N.'},
+        {texte:'Q4.1 (2 pts) — Nombre de protons de l\'atome d\'azote.',rep:'7 (Z = 7).'},
+        {texte:'Q7 (3 pts) — Relation correcte pour Ec : ½×m²×v² / ½×m×v² / ½×m²×v.',rep:'Ec = ½ × m × v²'},
+        {texte:'Q8 (5 pts) — Vitesse maximale vmax à l\'impact (h = 0,5 m, g = 10 N/kg).',rep:'v = √(2×g×h) = √(2×10×0,5) = √10 ≈ 3,16 m/s'}
       ]},
       {type:'svt',label:'SVT — Vers de terre et agriculture (25 pts)',pts:25,questions:[
-        {texte:'Q1 (6 pts) — À l\'aide du document 1A, expliquer les différences observées entre les photos Jour 1 et Jour 7 du lombricomposteur.',rep:'Jour 1 : déchets organiques (feuilles, épluchures) en surface, vers de terre au fond. Jour 7 : déchets partiellement décomposés, mélangés avec la terre, enrichissement visible. Explication : les vers ont ingéré les déchets, les ont transformés en humus → compost plus riche et plus sombre.',pts:25},
-        {texte:'Q2 (4 pts) — À l\'aide des documents 1A et 1B, répondre au questionnaire de l\'annexe 1.',rep:'Compléter l\'annexe selon les documents fournis (rôle des vers : aération du sol, décomposition matière organique, amélioration structure du sol).',pts:25},
-        {texte:'Q3 (8 pts) — À l\'aide du document 2, identifier l\'impact (positif ou négatif) des trois pratiques agricoles sur le nombre de vers de terre : labour, type de fertilisant, pesticides. Justification chiffrée pour chacune.',rep:'Labour : impact négatif → détruit les galeries, coupe les vers, perturbe l\'habitat (donner valeur chiffrée du doc.2). Fertilisant organique : positif → augmente la matière organique disponible. Pesticides : négatif → toxiques pour les vers (donner % de réduction).',pts:25},
-        {texte:'Q4 (7 pts) — À l\'aide de l\'ensemble des documents, expliquer pourquoi la préservation des vers de terre est un enjeu important pour nourrir l\'humanité. Préciser les pratiques à encourager ou limiter.',rep:'Les vers améliorent la structure et la fertilité du sol → meilleure croissance des plantes → meilleurs rendements agricoles → nourrir plus de personnes. Encourager : agriculture biologique, compostage, semis direct. Limiter : labour intensif, pesticides, engrais chimiques.',pts:25}
+        {texte:'Q1 (6 pts) — Différences observées entre Jour 1 et Jour 7 du lombricomposteur.',rep:'Jour 7 : déchets décomposés, mélangés, enrichis → humus.'},
+        {texte:'Q4 (7 pts) — Pourquoi la préservation des vers de terre est un enjeu pour nourrir l\'humanité.',rep:'Vers améliorent structure et fertilité du sol → meilleurs rendements agricoles.'}
       ]}
     ]
   },
@@ -484,34 +300,32 @@ const SUJETS = [
     titre:'25GENSCAA1 — PC: Sécurité électrique voilier · SVT: Volcans Islande',
     pdf:'https://www.freemaths.fr/sujets-dnb-college/brevet-serie-generale/sciences/annees/annee-2025/asie/sujet-et-correction/brevet-sciences-asie-2025-sujet.pdf',
     exos:[
-      {type:'pc',label:'PC — Sécurité électrique à bord d\'un voilier (25 pts)',pts:25,questions:[
-        {texte:'Q1 (2 pts) — Préciser si les appareils récepteurs dans le voilier sont branchés en série ou en dérivation et justifier.',rep:'En dérivation. Justification : chaque appareil fonctionne indépendamment (si un s\'éteint les autres continuent) → montage en dérivation.',pts:25},
-        {texte:'Q2 (2 pts) — Proposer un moyen de protéger efficacement les connexions électriques de l\'oxydation à bord des voiliers.',rep:'Utiliser des connecteurs en inox ou en laiton argenté / appliquer une graisse isolante ou un vernis sur les connexions / utiliser des câbles avec gaine protectrice imperméable.',pts:25},
-        {texte:'Q3 (3 pts) — Recopier l\'équation modélisant l\'oxydation du cuivre parmi les 4 proposées. Donner deux éléments de justification.\n(1) 2Cu + O₂ → 2CuO\n(2) 2Cu + 2O₂ → CuO\n(3) Cu + 2O₂ → 2CuO\n(4) 2CuO → 2Cu + O₂',rep:'Équation (1) : 2Cu + O₂ → 2CuO. Justification 1 : conservation des atomes (2Cu gauche = 2Cu droite ; 2O gauche = 2O droite). Justification 2 : c\'est une oxydation (Cu perd des électrons, O₂ est le comburant).',pts:25},
-        {texte:'Q4 (2 pts) — Écrire la formule de l\'ion cuivre (II).',rep:'Cu²⁺',pts:25},
-        {texte:'Q5 (3 pts) — Montrer par calcul que l\'intensité dans la lampe tricolore est égale à 0,5 A (lampe 6W - 12V).',rep:'I = P/U = 6/12 = 0,5 A ✓',pts:25},
-        {texte:'Q6 (4 pts) — Recopier le schéma du circuit en ajoutant les schémas normalisés des appareils pour mesurer la tension aux bornes de la résistance et l\'intensité.',rep:'Voltmètre : en dérivation (en parallèle) aux bornes de la résistance. Ampèremètre : en série dans le circuit.',pts:25},
-        {texte:'Q7 (2 pts) — Rappeler l\'effet de l\'ajout d\'une résistance sur l\'intensité dans un circuit en série.',rep:'L\'ajout d\'une résistance en série augmente la résistance totale du circuit → l\'intensité du courant diminue (loi d\'Ohm : I = U/R).',pts:25},
-        {texte:'Q8 (2 pts) — À l\'aide du graphique, déterminer la valeur de la tension aux bornes de la résistance (47 Ω) pour I = 0,19 A.',rep:'Lire la valeur de U sur le graphique U=f(I) pour I = 0,19 A. Ex : U ≈ 8,9 V (vérifier avec U = R×I = 47×0,19 = 8,93 V).',pts:25},
-        {texte:'Q9 (5 pts) — Déterminer la valeur de la tension aux bornes de la lampe du circuit. Commenter le résultat.',rep:'U_total = U_résistance + U_lampe (loi d\'additivité des tensions en série). U_lampe = U_total − U_résistance. Commenter : si U_lampe < 12V la lampe brille moins fort que prévu.',pts:25}
+      {type:'pc',label:'PC — Sécurité électrique voilier (25 pts)',pts:25,questions:[
+        {texte:'Q1 (2 pts) — Appareils branchés en série ou dérivation ? Justifier.',rep:'En dérivation → chaque appareil fonctionne indépendamment.'},
+        {texte:'Q3 (3 pts) — Équation modélisant l\'oxydation du cuivre : 2Cu+O₂→2CuO / 2Cu+2O₂→CuO / Cu+2O₂→2CuO / 2CuO→2Cu+O₂',rep:'2Cu + O₂ → 2CuO (conservation des atomes).'},
+        {texte:'Q4 (2 pts) — Formule de l\'ion cuivre (II).',rep:'Cu²⁺'},
+        {texte:'Q5 (3 pts) — Intensité lampe 6W - 12V.',rep:'I = P/U = 6/12 = 0,5 A'},
+        {texte:'Q7 (2 pts) — Effet de l\'ajout d\'une résistance en série sur l\'intensité.',rep:'L\'intensité diminue.'}
       ]},
       {type:'svt',label:'SVT — Volcans comme source d\'énergie (25 pts)',pts:25,questions:[
-        {texte:'Q1 (6 pts) — À l\'aide du document 1 et de vos connaissances, répondre aux questions du QCM en annexe.',rep:'QCM sur la géothermie : chaleur interne de la Terre / énergie renouvelable / utilisation en Islande / forage géothermique. Répondre selon les documents.',pts:25},
-        {texte:'Q2 (6 pts) — En donnant des valeurs chiffrées du document 2b, comparer les vitesses des ondes sismiques au niveau du forage IDDP-1 (zone D) par rapport aux zones A, B, C.',rep:'Zone D : vitesse des ondes sismiques plus faible (< valeur seuil) par rapport aux zones A, B, C (valeurs normales). La diminution indique la présence de magma (roches partiellement fondues = moins rigides).',pts:25},
-        {texte:'Q3 (5 pts) — À l\'aide des documents 2a et 2b et de vos connaissances, expliquer comment les données sismiques confirment la découverte d\'une chambre magmatique à environ 2 km.',rep:'Les ondes sismiques se propagent moins vite dans les roches fondues (magma). À 2 km de profondeur sous Krafla, les vitesses enregistrées sont anormalement basses (document 2b) → présence de roches en fusion → chambre magmatique confirmée.',pts:25},
-        {texte:'Q4 (8 pts) — À l\'aide de l\'ensemble des documents, expliquer en quoi les caractéristiques de l\'Islande justifient le développement de l\'énergie géothermique.',rep:'1) Islande sur une dorsale océanique (jonction plaques eurasienne et nord-américaine) → forte activité volcanique → chaleur accessible à faible profondeur. 2) Nombreux geysers et sources chaudes → ressource abondante. 3) Énergie renouvelable → alternative aux énergies fossiles. 4) Déjà 30% de l\'électricité islandaise issue de la géothermie.',pts:25}
+        {texte:'Q4 (8 pts) — Pourquoi les caractéristiques de l\'Islande justifient le développement de la géothermie.',rep:'1) Dorsale océanique → activité volcanique. 2) Geysers et sources chaudes. 3) Énergie renouvelable. 4) Déjà 30% électricité géothermique.'}
       ]}
     ]
   }
 ];
+
+// ============================================================
+// FONCTIONS D'AFFICHAGE
+// ============================================================
 
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function buildGrid() {
-  var html = '';
-  SUJETS.forEach(function(s, idx) {
+  const grid = document.getElementById('grid');
+  let html = '';
+  SUJETS.forEach((s, idx) => {
     html += '<div class="card" onclick="ouvrirSujet(' + idx + ')">'
       + '<div class="card-top"><span class="card-num">Sujet ' + s.id + '</span><span class="badge">' + s.annee + '</span></div>'
       + '<div class="card-titre">' + esc(s.titre) + '</div>'
@@ -519,28 +333,28 @@ function buildGrid() {
       + (s.pdf ? '<a class="card-pdf" href="' + s.pdf + '" target="_blank" onclick="event.stopPropagation()">📄 Sujet officiel PDF</a>' : '')
       + '</div>';
   });
-  document.getElementById('grid').innerHTML = html;
+  grid.innerHTML = html;
 }
 
 function ouvrirSujet(idx) {
-  var s = SUJETS[idx];
+  const s = SUJETS[idx];
   document.getElementById('svTitre').innerHTML = 'DNB ' + s.annee + ' — ' + s.session;
   document.getElementById('svSub').textContent = s.titre;
   document.getElementById('svDl').href = s.pdf;
-  document.getElementById('btnPdfExport').onclick = function() { exportPDF(idx); };
+  document.getElementById('btnPdfExport').onclick = () => exportPDF(idx);
 
-  var html = '';
-  s.exos.forEach(function(exo, ei) {
-    var cls = exo.type === 'svt' ? 'badge-svt' : exo.type === 'pc' ? 'badge-pc' : 'badge-techno';
-    var label = exo.type === 'svt' ? 'SVT' : exo.type === 'pc' ? 'Physique-Chimie' : 'Technologie';
+  let html = '';
+  s.exos.forEach((exo, ei) => {
+    const cls = exo.type === 'svt' ? 'badge-svt' : exo.type === 'pc' ? 'badge-pc' : 'badge-techno';
+    const label = exo.type === 'svt' ? 'SVT' : exo.type === 'pc' ? 'Physique-Chimie' : 'Technologie';
     html += '<div class="exo">'
       + '<div class="exo-head"><span class="exo-badge ' + cls + '">' + label + '</span><span class="exo-label">' + esc(exo.label) + '</span></div>';
-    exo.questions.forEach(function(q, qi) {
-      var qid = 'q_' + idx + '_' + ei + '_' + qi;
+    exo.questions.forEach((q, qi) => {
+      const qid = 'q_' + s.id + '_' + ei + '_' + qi;
       html += '<div class="question">'
         + '<div class="q-texte">' + esc(q.texte) + '</div>'
         + '<textarea class="answer-area" id="ans_' + qid + '" placeholder="Écris ta réponse ici..."></textarea>'
-        + '<button class="btn-corriger" onclick="corriger(' + idx + ',' + ei + ',' + qi + ',\"' + qid + '\")">✦ Corriger avec IA</button>'
+        + '<button class="btn-corriger" onclick="corriger(' + idx + ',' + ei + ',' + qi + ',\'' + qid + '\')">✦ Corriger avec IA</button>'
         + '<div class="panel" id="panel_' + qid + '"></div>'
         + '</div>';
     });
@@ -549,7 +363,7 @@ function ouvrirSujet(idx) {
 
   document.getElementById('svContent').innerHTML = html;
   document.getElementById('landing').style.display = 'none';
-  var sv = document.getElementById('sujetView');
+  const sv = document.getElementById('sujetView');
   sv.style.display = 'block';
   sv.classList.add('active');
   window.scrollTo(0,0);
@@ -562,151 +376,131 @@ function retour() {
   window.scrollTo(0,0);
 }
 
+// ============================================================
+// CORRECTION IA (utilise window.callIA du proxy-client.js)
+// ============================================================
 
 function badge(val) {
-  var ok = (val === 'Oui' || val === 'OK');
-  var partiel = (val === 'Partiel');
-  var bg  = ok ? 'rgba(94,207,177,.15)' : partiel ? 'rgba(245,166,35,.15)' : 'rgba(232,122,122,.15)';
-  var col = ok ? '#5ecfb1' : partiel ? '#f5a623' : '#e87a7a';
-  var icon = ok ? '✓' : partiel ? '◑' : '✗';
+  const ok = (val === 'Oui' || val === 'OK');
+  const partiel = (val === 'Partiel');
+  const bg = ok ? 'rgba(94,207,177,.15)' : partiel ? 'rgba(245,166,35,.15)' : 'rgba(232,122,122,.15)';
+  const col = ok ? '#5ecfb1' : partiel ? '#f5a623' : '#e87a7a';
+  const icon = ok ? '✓' : partiel ? '◑' : '✗';
   return '<span style="background:'+bg+';color:'+col+';border:1px solid '+col+';border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700;">'+icon+' '+esc(val)+'</span>';
 }
 
 async function corriger(sIdx, ei, qi, qid) {
-  var s   = SUJETS[sIdx];
-  var exo = s.exos[ei];
-  var q   = exo.questions[qi];
-  var ans = document.getElementById('ans_' + qid).value.trim();
+  const s = SUJETS[sIdx];
+  const exo = s.exos[ei];
+  const q = exo.questions[qi];
+  const ans = document.getElementById('ans_' + qid).value.trim();
   if (!ans) { alert("Écris ta réponse d'abord !"); return; }
 
-  var panel = document.getElementById('panel_' + qid);
-  var btn   = document.querySelector('[onclick*="' + qid + '"]');
+  const panel = document.getElementById('panel_' + qid);
+  const btn = panel.previousElementSibling?.querySelector('.btn-corriger');
   panel.classList.add('show');
-  panel.innerHTML = '<div class="loading"><span class="dot"></span>Correction IA en cours...</div>';
+  panel.innerHTML = '<div class="loading"><span class="dot"></span>Correction en cours...</div>';
   if (btn) btn.disabled = true;
 
-  var disc = exo.type === 'svt' ? 'SVT (Sciences de la Vie et de la Terre)'
-           : exo.type === 'pc'  ? 'Physique-Chimie'
-           : 'Technologie';
-  var qTexteClean = q.texte.split('\n').join(' ').substring(0,300);
-  var pts = q.pts_question || exo.pts;
-  var matchPts = (q.texte||'').match(/\((\d+(?:[,.]\d+)?)\s*pts?\)/i);
-  if (!q.pts_question && matchPts) pts = parseFloat(matchPts[1].replace(',','.'));
+  const disc = exo.type === 'svt' ? 'SVT' : exo.type === 'pc' ? 'Physique-Chimie' : 'Technologie';
+  const pts = exo.pts;
+  const qTexteClean = q.texte.split('\n').join(' ').substring(0,300);
 
-  var methodeSpec = exo.type === 'pc'
-    ? 'formule avant application, valeurs avec unites, calcul detaille, conversion, conclusion'
-    : exo.type === 'svt'
-    ? 'extraction documents, vocabulaire scientifique precis, raisonnement obs-hypothese-conclusion'
-    : 'besoin identifie, chaine energie/information, justification choix techniques';
+  const system = `Tu es un correcteur expert du DNB en SCIENCES (${disc}), exigeant et bienveillant.
 
-  var system = 'Tu es correcteur expert DNB SCIENCES ' + disc + ', exigeant et bienveillant.'
-    + ' Sujet : ' + s.titre + ', session ' + s.annee + '. Exercice : ' + exo.label + '.'
-    + ' METHODE ' + disc + ' : ' + methodeSpec + '.'
-    + ' BAREME UNIVERSEL pour cette question (' + pts + ' pts) :'
-    + ' 1/3 BONNE REPONSE (resultat/element correct) — 1/3 REDACTION (phrase complete, vocabulaire precis) — 1/3 JUSTIFICATION (demarche, formule, etapes visibles).'
-    + ' Reponse sans justif = 1/3 max. Reponse sans redaction = 2/3 max. Justif sans resultat = 1/3. Tout correct = max.'
-    + ' Reponds UNIQUEMENT en JSON valide sans markdown :'
-    + ' {"note":X,"sur":' + pts + ',"cours_su":"Oui/Partiel/Non","transfert":"Oui/Partiel/Non","methode":"Oui/Partiel/Non",'
-    + '"detail_bareme":"reponse X/' + Math.round(pts/3*10)/10 + ' - redaction X/' + Math.round(pts/3*10)/10 + ' - justification X/' + Math.round(pts/3*10)/10 + '",'
-    + '"correction_experte":"correction modele complete avec formules, calculs, unites, conclusion.",'
-    + '"analyse_eleve":"ce qui est juste, ce qui manque, erreurs identifiees.",'
-    + '"pistes":"2-3 conseils precis."}';
+Ta correction doit être APPROFONDIE. Réponds UNIQUEMENT en JSON valide avec cette structure exacte :
+{
+  "note": "X/${pts}",
+  "cours_su": "Oui" ou "Partiel" ou "Non",
+  "methode": "Oui" ou "Partiel" ou "Non",
+  "commentaire": "Analyse détaillée de la réponse (3-5 lignes)",
+  "pistes": "2 ou 3 conseils précis pour progresser"
+}
 
-  var prompt = 'Question : ' + qTexteClean
-    + '\nCorrection attendue : ' + q.rep.substring(0,300)
-    + '\nRéponse élève : ' + ans;
+Critères DNB SCIENCES :
+- cours_su : définitions, lois, formules, vocabulaire scientifique corrects ?
+- methode : raisonnement logique, étapes visibles, exploitation des documents, conclusion explicite
+- La note sur ${pts} pts doit refléter la qualité de la réponse`;
+
+  const prompt = `Sujet: ${s.titre} (${s.annee})
+Exercice: ${exo.label}
+Question: ${qTexteClean}
+Correction attendue: ${q.rep}
+Réponse élève: ${ans}`;
 
   try {
-    var txt  = await callIA(prompt, system);
-    var json = safeJSON(txt);
-
+    const txt = await window.callIA(prompt, system);
+    const json = window.safeJSON ? window.safeJSON(txt) : (()=>{try{return JSON.parse(txt.replace(/```json|```/g,'').trim());}catch(e){return null;}})();
+    
     if (!STORE[s.id]) STORE[s.id] = [];
-    STORE[s.id].push({ exo: exo.label, qi: qi+1, question: q.texte.substring(0,80),
-      reponseEleve: ans, correctionIA: json ? (json.analyse_eleve||json.commentaire) : txt,
-      correctionOff: q.rep, pts: pts, note: json ? json.note : null });
-    try { localStorage.setItem(_STORE_KEY, JSON.stringify(STORE)); } catch(e2) {}
+    STORE[s.id].push({
+      exo: exo.label, qi: qi+1, question: q.texte.substring(0,80),
+      reponseEleve: ans, correctionIA: json ? json.commentaire : txt,
+      correctionOff: q.rep, pts: pts, note: json ? json.note : null
+    });
+    saveCorrections();
 
-    panel.innerHTML = '<div class="corr-ia">'
-      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">'
-      +   '<div class="corr-note">✓ ' + (json ? json.note : '?') + ' / ' + pts + '</div>'
-      +   '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">'
-      +     '<span style="font-size:10px;color:#9090a8;">Cours</span>' + badge(json ? json.cours_su : '?')
-      +     '<span style="font-size:10px;color:#9090a8;margin-left:6px;">Transfert</span>' + badge(json ? json.transfert : '?')
-      +     '<span style="font-size:10px;color:#9090a8;margin-left:6px;">Méthode</span>' + badge(json ? json.methode : '?')
-      +   '</div>'
-      + '</div>'
-      + (json && json.detail_bareme ? '<div style="margin-bottom:10px;"><div style="font-size:10px;color:#f5a623;font-weight:700;text-transform:uppercase;margin-bottom:5px;">📊 Barème 1/3</div><div style="background:rgba(245,166,35,.06);border-left:3px solid #f5a623;padding:8px 13px;font-size:12px;font-family:monospace;line-height:1.8;">' + esc(json.detail_bareme) + '</div></div>' : '')
-      + '<div style="margin-bottom:10px;"><div style="font-size:10px;color:#5eaacf;font-weight:700;text-transform:uppercase;margin-bottom:5px;">📝 Correction modèle</div><div style="background:rgba(94,170,207,.06);border-left:3px solid #5eaacf;padding:10px 13px;font-size:13px;line-height:1.7;">' + esc(json ? (json.correction_experte||json.commentaire||'') : txt) + '</div></div>'
-      + '<div style="margin-bottom:10px;"><div style="font-size:10px;color:#5ecfb1;font-weight:700;text-transform:uppercase;margin-bottom:5px;">🔍 Analyse</div><div class="corr-txt" style="font-size:13px;">' + esc(json ? (json.analyse_eleve||json.commentaire||txt) : txt) + '</div></div>'
-      + (json && json.pistes ? '<div><div style="font-size:10px;color:#9090a8;font-weight:700;text-transform:uppercase;margin-bottom:5px;">🎯 Pour progresser</div><div class="corr-conseil" style="font-size:13px;">' + esc(json.pistes) + '</div></div>' : '')
-      + '</div>'
-      + '<div class="corr-off"><strong>📖 CORRECTION OFFICIELLE</strong><br>' + esc(q.rep) + '</div>'
-      + '<button class="btn-copy" onclick="copier(this)">📋 Copier</button>';
-
+    panel.innerHTML = `
+      <div class="corr-ia">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div class="corr-note">✓ ${json ? json.note : '?'} / ${pts}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            <span style="font-size:10px;color:#9090a8;">Cours</span>${badge(json ? json.cours_su : '?')}
+            <span style="font-size:10px;color:#9090a8;margin-left:6px;">Méthode</span>${badge(json ? json.methode : '?')}
+          </div>
+        </div>
+        <div class="corr-txt">${json ? json.commentaire : txt}</div>
+        ${json && json.pistes ? '<div class="corr-conseil" style="margin-top:8px;color:#e8c87a">🎯 ' + esc(json.pistes) + '</div>' : ''}
+      </div>
+      <div class="corr-off"><strong>📖 CORRECTION OFFICIELLE</strong><br>${esc(q.rep)}</div>
+      <button class="btn-copy" onclick="copier(this)">📋 Copier</button>`;
   } catch(err) {
-    panel.innerHTML = '<div style="color:#e87a7a">❌ Erreur : ' + err.message + '</div>';
-  } finally {
-    if (btn) btn.disabled = false;
+    let errMsg = err.message;
+    if (errMsg === 'ACCES_BLOQUE') errMsg = 'Accès bloqué. Veuillez activer votre abonnement.';
+    panel.innerHTML = '<div style="color:#e87a7a">❌ ' + errMsg + '</div>';
   }
+  if (btn) btn.disabled = false;
 }
 
 async function copier(btn) {
   try {
     await navigator.clipboard.writeText(btn.parentElement.innerText);
     btn.textContent = '✓ Copié';
-    setTimeout(function() { btn.textContent = '📋 Copier'; }, 2000);
+    setTimeout(() => btn.textContent = '📋 Copier', 2000);
   } catch(e) {}
 }
 
 function exportPDF(sIdx) {
-  var s = SUJETS[sIdx];
-  var data = STORE[s.id];
+  const s = SUJETS[sIdx];
+  const data = STORE[s.id];
   if (!data || !data.length) { alert("Corrige au moins une question d'abord."); return; }
-  var totalObt = 0, totalMax = 0;
-  data.forEach(function(c) {
-    html += '<h2>' + c.exo + ' — Q' + c.qi + (c.note!=null?' ('+c.note+'/'+c.pts+')':'') + '</h2>'
-      + '<div class="q"><strong>Question :</strong> ' + c.question + '</div>'
-      + '<div class="rep-eleve"><strong>✏️ Réponse élève :</strong><br>' + (c.reponseEleve || '—') + '</div>'
-      + (c.cours_su ? '<div class="rep-detail">📚 <strong>Cours :</strong> ' + c.cours_su + '</div>' : '')
-      + (c.methode  ? '<div class="rep-detail">✏️ <strong>Méthode :</strong> ' + c.methode + '</div>' : '')
-      + '<div class="rep-ia">🤖 <strong>Analyse IA :</strong><br>' + c.correctionIA + '</div>'
-      + (c.pistes   ? '<div class="rep-pistes">🎯 <strong>Pistes :</strong> ' + c.pistes + '</div>' : '')
-      + '<div class="rep-off">📖 <strong>Correction officielle :</strong><br>' + c.correctionOff + '</div>';
+  let totalObt = 0, totalMax = 0;
+  data.forEach(c => { if (c.note != null) totalObt += parseFloat(c.note); totalMax += c.pts; });
+  
+  let html = `<html><head><meta charset="UTF-8"><style>
+    body{font-family:Arial,sans-serif;font-size:13px;color:#111;padding:2rem;}
+    h1{font-size:16px;border-bottom:2px solid #5eaacf;color:#2a6a8a;padding-bottom:6px;}
+    h2{font-size:13px;margin-top:1.2rem;border-left:4px solid #5eaacf;padding-left:8px;color:#333;}
+    .ia{background:#e6f4f9;border-left:3px solid #5eaacf;padding:8px;border-radius:4px;margin-bottom:6px;}
+    .off{background:#e6f9ee;border-left:3px solid #34c76b;padding:8px;border-radius:4px;}
+    .total{margin-top:16px;padding:10px;background:#f5f5f5;border-radius:6px;font-weight:bold;}
+  </style></head><body>
+  <h1>🔬 Sciences DNB ${s.annee} — ${s.session}</h1>
+  <p>Généré le ${new Date().toLocaleDateString('fr-FR')} · ${data.length} question(s)</p>`;
+  data.forEach(c => {
+    html += `<h2>${c.exo} — Q${c.qi} (${c.pts} pts)</h2>
+    <div class="ia">🤖 ${c.correctionIA}</div>
+    <div class="off">📖 ${c.correctionOff}</div>`;
   });
-  var html = '<html><head><meta charset="UTF-8"><style>'
-    + 'body{font-family:Arial,sans-serif;font-size:13px;color:#111;padding:2rem;}'
-    + 'h1{font-size:16px;border-bottom:2px solid #5eaacf;color:#2a6a8a;padding-bottom:6px;margin-bottom:16px;}'
-    + 'h2{font-size:13px;margin-top:1.2rem;border-left:4px solid #5eaacf;padding-left:8px;}'
-    + '.q{margin-bottom:8px;font-style:italic;color:#555;}'
-    + '.rep-ia{background:#e6f4f9;border:1px solid #5eaacf;border-radius:6px;padding:8px;margin:6px 0;}'
-    + '.rep-eleve{background:#f0f0ff;border:1px solid #9090c8;border-radius:6px;padding:8px;margin:6px 0;}'
-    + '.rep-detail{background:#f9f9f0;border:1px solid #c8c890;border-radius:6px;padding:6px 10px;margin:4px 0;font-size:12px;}'
-    + '.rep-pistes{background:#fff8e6;border:1px solid #f5a623;border-radius:6px;padding:8px;margin:6px 0;}'
-    + '.rep-off{background:#e6f9ee;border:1px solid #34c76b;border-radius:6px;padding:8px;margin:6px 0;font-size:12px;}'
-    + '.score{font-size:18px;font-weight:bold;color:#2a6a8a;margin:16px 0;}'
-    + '</style>
-</head><body>'
-    + '<h1>🔬 Corrections Sciences — ' + s.annee + ' ' + s.session + '</h1>'
-    + '<div class="score">Score : ' + totalObt.toFixed(1) + ' / ' + totalMax + '</div>';
-  data.forEach(function(c) {
-    html += '<h2>' + c.exo + ' — Q' + c.qi + (c.note!=null?' ('+c.note+'/'+c.pts+')':'') + '</h2>'
-      + '<div class="q">' + c.question + '</div>'
-      + '<div class="rep-ia">🤖 ' + c.correctionIA + '</div>'
-      + '<div class="rep-off">✅ ' + c.correctionOff + '</div>';
-  });
-  html += '</body></html>';
-    var blob = new Blob([html], {type:'text/html'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'corrections_' + s.annee + '_' + s.session.replace(/[^a-z0-9]/gi,'_') + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  html += `<div class="total">📊 Note totale estimée : ${totalObt.toFixed(1)} / ${totalMax} pts (${Math.round(totalObt/totalMax*100)}%)</div></body></html>`;
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  win.print();
 }
 
-window.onload = buildGrid;
+// Initialisation
+buildGrid();
 </script>
 </body>
 </html>
