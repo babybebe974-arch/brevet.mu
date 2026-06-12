@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>🤖 Correcteur – Brevet 2026</title>
+  <title>ðŸ¤– Correcteur â€“ Brevet 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -32,7 +32,7 @@ function essaiExpire(){var s=localStorage.getItem(MONETIZATION.STORAGE_KEYS.tria
 function aAccesComplet(){if(localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid)==='true')return true;return estEnEssai();}
 function aAccesPayant(){return localStorage.getItem(MONETIZATION.STORAGE_KEYS.paidValid)==='true';}
 function joursRestantsEssai(){var s=localStorage.getItem(MONETIZATION.STORAGE_KEYS.trialStart);if(!s)return MONETIZATION.essaiJours;return Math.max(0,Math.ceil(MONETIZATION.essaiJours-(Date.now()-parseInt(s))/86400000));}
-function validerCode(code,cb){var PROXY='https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';fetch(PROXY,{method:'POST',body:new URLSearchParams({data:JSON.stringify({userId:localStorage.getItem('user_id')||'anon',action:'valider_code',code:code.trim(),source:document.title||''})})}).then(function(r){return r.json();}).then(function(d){if(d&&d.success){localStorage.setItem(MONETIZATION.STORAGE_KEYS.paidValid,'true');if(cb)cb({success:true,message:'Acces debloque!'});}else{if(cb)cb({success:false,message:d.error||'Code invalide.'});}}).catch(function(){if(cb)cb({success:false,message:'Verifiez votre connexion.'});});}
+function validerCode(code,cb){var PROXY='https://script.google.com/macros/s/AKfycbxzUhsZ4ewxV_zGsu5h_L2eryTJiW2E-gZLvihC-vPl2DimCJxAeTF2dhbDF8no-ocG/exec';fetch(PROXY,{method:'POST',body:new URLSearchParams({data:JSON.stringify({userId:localStorage.getItem('user_id')||'anon',action:'valider_code',code:code.trim(),source:document.title||''})})}).then(function(r){return r.json();}).then(function(d){if(d&&d.success){localStorage.setItem(MONETIZATION.STORAGE_KEYS.paidValid,'true');if(cb)cb({success:true,message:'Acces debloque!'});}else{if(cb)cb({success:false,message:d.error||'Code invalide.'});}}).catch(function(){if(cb)cb({success:false,message:'Verifiez votre connexion.'});});}
 function afficherOverlay(){if(document.getElementById('monet-overlay'))return;var canClose=estEnEssai();var o=document.createElement('div');o.id='monet-overlay';o.innerHTML='<style>#monet-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,9,15,0.97);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;}.monet-card{background:#111118;border:1px solid #2a2a38;border-radius:16px;padding:32px 28px;max-width:460px;width:92%;color:#e8e8f0;text-align:center;}.monet-wa-btn{display:flex;align-items:center;justify-content:center;padding:13px 28px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;background:#25D366;color:#fff;margin:12px 0;width:100%;box-sizing:border-box;border:none;cursor:pointer;}.monet-input{width:100%;background:#0d0d14;border:1px solid #2a2a38;border-radius:10px;color:#e8e8f0;font-size:15px;padding:12px 16px;text-align:center;outline:none;box-sizing:border-box;margin-bottom:10px;}.monet-btn{padding:11px 24px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid rgba(94,207,177,0.3);background:rgba(94,207,177,0.1);color:#5ecfb1;margin:4px;}.monet-btn.ghost{background:transparent;color:#9090a8;border:1px solid #2a2a38;}.monet-msg{font-size:13px;margin-top:10px;min-height:24px;}</style><div class="monet-card"><div style="font-size:44px;margin-bottom:10px;">60</div><div style="font-size:22px;font-weight:800;color:#e8c87a;margin-bottom:8px;">Essai termine</div><div style="font-size:40px;font-weight:800;color:#5ecfb1;margin:8px 0;">999 Rs <span style="font-size:16px;color:#9090a8;">/ an</span></div><div style="background:#0d0d14;border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:13px;line-height:2;">1. Envoyez 999 Rs Juice au <strong>+230 58 45 94 02</strong><br>2. Envoyez capture WhatsApp<br>3. Recevez votre code</div><a href="https://wa.me/23058459402?text=Bonjour%20Hub%20Brevet%202026%20999Rs%20capture%20Juice" target="_blank" class="monet-wa-btn">Contacter WhatsApp</a><hr style="border:none;border-top:1px solid #2a2a38;margin:16px 0;"><input type="text" class="monet-input" id="monet-code-input" placeholder="Votre code" maxlength="40"><div><button class="monet-btn" id="monet-valider">Valider le code</button>'+(canClose?'<button class="monet-btn ghost" id="monet-close">Continuer essai</button>':'')+' </div><div class="monet-msg" id="monet-msg"></div></div>';document.body.appendChild(o);document.getElementById('monet-valider').onclick=function(){var code=document.getElementById('monet-code-input').value.trim();var msg=document.getElementById('monet-msg');if(!code){msg.style.color='#e87a7a';msg.textContent='Entrez un code.';return;}msg.style.color='#9090a8';msg.textContent='Verification...';validerCode(code,function(r){if(r.success){msg.style.color='#5ecfb1';msg.textContent=r.message;setTimeout(function(){document.getElementById('monet-overlay').remove();location.reload();},1500);}else{msg.style.color='#e87a7a';msg.textContent=r.message;}});};var cl=document.getElementById('monet-close');if(cl)cl.onclick=function(){document.getElementById('monet-overlay').remove();};}
 function afficherBlocageEssaiExpire(){afficherOverlay();}
 function creerBanniere(){if(document.getElementById('monet-banner')||aAccesPayant())return;var j=joursRestantsEssai(),expire=essaiExpire();var bg=expire?'#e87a7a':'#e8c87a',col=expire?'#fff':'#09090f';var b=document.createElement('div');b.id='monet-banner';b.innerHTML='<style>#monet-banner{position:sticky;top:0;left:0;right:0;background:'+bg+';color:'+col+';font-family:Arial,sans-serif;font-size:13px;padding:9px 20px;z-index:9998;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}.monet-banner-btn{padding:5px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:'+col+';color:'+bg+';}</style><span>'+(expire?'Essai termine - IA bloquee':'Essai gratuit - J-'+j+' '+(j<=1?'jour restant':'jours restants')+' - 999 Rs/an')+'</span><button class="monet-banner-btn" onclick="afficherOverlay()">'+(expire?'Debloquer':'Debloquer WhatsApp')+'</button>';document.body.insertBefore(b,document.body.firstChild);}
@@ -43,31 +43,31 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </head>
 <body>
 <div class="container">
-  <a href="index.html" class="back-link">← Retour au hub</a>
-  <h1>🤖 Correcteur</h1>
-  <div class="sub">Notation • Correction • Méthodologie par matière</div>
+  <a href="index.html" class="back-link">â† Retour au hub</a>
+  <h1>ðŸ¤– Correcteur</h1>
+  <div class="sub">Notation â€¢ Correction â€¢ MÃ©thodologie par matiÃ¨re</div>
 
   <div class="selecteur">
-    <label>📚 Matière : </label>
+    <label>ðŸ“š MatiÃ¨re : </label>
     <select id="matiereSelect">
-      <option value="francais">📖 Français (rédaction, essai, commentaire)</option>
-      <option value="maths">📐 Mathématiques (démonstration, résolution)</option>
-      <option value="histoire">🌍 Histoire-Géo & EMC (paragraphe argumenté)</option>
-      <option value="sciences">🔬 Sciences (démarche scientifique)</option>
+      <option value="francais">ðŸ“– FranÃ§ais (rÃ©daction, essai, commentaire)</option>
+      <option value="maths">ðŸ“ MathÃ©matiques (dÃ©monstration, rÃ©solution)</option>
+      <option value="histoire">ðŸŒ Histoire-GÃ©o & EMC (paragraphe argumentÃ©)</option>
+      <option value="sciences">ðŸ”¬ Sciences (dÃ©marche scientifique)</option>
     </select>
   </div>
 
   <textarea id="userTexte" rows="12" placeholder="Collez votre texte ici..."></textarea>
   
   <div class="btn-group">
-    <button id="corrigerBtn">🤖 Corriger mon texte</button>
-    <button id="effacerBtn">🗑️ Effacer</button>
+    <button id="corrigerBtn">ðŸ¤– Corriger mon texte</button>
+    <button id="effacerBtn">ðŸ—‘ï¸ Effacer</button>
   </div>
 
-  <div id="loading" class="loading">⏳ Analyse en cours...</div>
+  <div id="loading" class="loading">â³ Analyse en cours...</div>
   <div id="resultat" class="resultat"></div>
 
-  <div class="sub" style="margin-top:1rem; font-size:0.7rem;">💡 Le correcteur note selon le barème officiel et donne une aide méthodologique adaptée à la matière.</div>
+  <div class="sub" style="margin-top:1rem; font-size:0.7rem;">ðŸ’¡ Le correcteur note selon le barÃ¨me officiel et donne une aide mÃ©thodologique adaptÃ©e Ã  la matiÃ¨re.</div>
 </div>
 
 <script>
@@ -75,34 +75,34 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   // URL DU PROXY GOOGLE SHEETS
   // ============================================================
       
-  // Barèmes et méthodologies par matière
+  // BarÃ¨mes et mÃ©thodologies par matiÃ¨re
   const baremes = {
-    francais: { nom: "Français", points: 20, criteres: "Orthographe (4 pts), syntaxe (4 pts), cohérence (6 pts), pertinence (6 pts)", methodologie: "Introduction : amorce, présentation, problématique, plan. Développement : paragraphes structurés, connecteurs, exemples. Conclusion : rappel, synthèse, ouverture." },
-    maths: { nom: "Mathématiques", points: 20, criteres: "Démarche (5 pts), calculs (5 pts), rédaction (5 pts), résultat (5 pts)", methodologie: "1. Lire l'énoncé, repérer les données. 2. Choisir la propriété/théorème. 3. Rédiger les calculs étape par étape. 4. Vérifier la cohérence du résultat. 5. Conclure par une phrase." },
-    histoire: { nom: "Histoire-Géo & EMC", points: 20, criteres: "Connaissances (6 pts), analyse (6 pts), argumentation (4 pts), expression (4 pts)", methodologie: "Paragraphe argumenté : 1. Introduction (contexte, problématique). 2. Développement (thèse, arguments, exemples précis). 3. Conclusion (réponse, ouverture)." },
-    sciences: { nom: "Sciences", points: 20, criteres: "Connaissances (6 pts), démarche scientifique (6 pts), rigueur (4 pts), expression (4 pts)", methodologie: "Démarche scientifique : 1. Problématique/hypothèse. 2. Protocole expérimental. 3. Résultats observés. 4. Interprétation/conclusion." }
+    francais: { nom: "FranÃ§ais", points: 20, criteres: "Orthographe (4 pts), syntaxe (4 pts), cohÃ©rence (6 pts), pertinence (6 pts)", methodologie: "Introduction : amorce, prÃ©sentation, problÃ©matique, plan. DÃ©veloppement : paragraphes structurÃ©s, connecteurs, exemples. Conclusion : rappel, synthÃ¨se, ouverture." },
+    maths: { nom: "MathÃ©matiques", points: 20, criteres: "DÃ©marche (5 pts), calculs (5 pts), rÃ©daction (5 pts), rÃ©sultat (5 pts)", methodologie: "1. Lire l'Ã©noncÃ©, repÃ©rer les donnÃ©es. 2. Choisir la propriÃ©tÃ©/thÃ©orÃ¨me. 3. RÃ©diger les calculs Ã©tape par Ã©tape. 4. VÃ©rifier la cohÃ©rence du rÃ©sultat. 5. Conclure par une phrase." },
+    histoire: { nom: "Histoire-GÃ©o & EMC", points: 20, criteres: "Connaissances (6 pts), analyse (6 pts), argumentation (4 pts), expression (4 pts)", methodologie: "Paragraphe argumentÃ© : 1. Introduction (contexte, problÃ©matique). 2. DÃ©veloppement (thÃ¨se, arguments, exemples prÃ©cis). 3. Conclusion (rÃ©ponse, ouverture)." },
+    sciences: { nom: "Sciences", points: 20, criteres: "Connaissances (6 pts), dÃ©marche scientifique (6 pts), rigueur (4 pts), expression (4 pts)", methodologie: "DÃ©marche scientifique : 1. ProblÃ©matique/hypothÃ¨se. 2. Protocole expÃ©rimental. 3. RÃ©sultats observÃ©s. 4. InterprÃ©tation/conclusion." }
   };
 
   async function callCorrection(texte, matiere) {
-    // Vérification accès
+    // VÃ©rification accÃ¨s
     if (typeof aAccesComplet !== 'undefined' && !aAccesComplet()) {
       if (typeof afficherBlocageEssaiExpire !== 'undefined') afficherBlocageEssaiExpire();
       throw new Error('ACCES_BLOQUE');
     }
     const b = baremes[matiere];
-    const prompt = `Tu es correcteur expert du brevet des collèges.
+    const prompt = `Tu es correcteur expert du brevet des collÃ¨ges.
 
-Matière : ${b.nom}
-Barème : ${b.criteres} — BAREME UNIVERSEL : 1/3 bonne réponse + 1/3 rédaction + 1/3 justification.
-Méthodologie attendue : ${b.methodologie}
+MatiÃ¨re : ${b.nom}
+BarÃ¨me : ${b.criteres} â€” BAREME UNIVERSEL : 1/3 bonne rÃ©ponse + 1/3 rÃ©daction + 1/3 justification.
+MÃ©thodologie attendue : ${b.methodologie}
 
-Texte de l'élève :
+Texte de l'Ã©lÃ¨ve :
 ${texte}
 
-Réponds UNIQUEMENT en JSON (sans texte avant ou après) :
+RÃ©ponds UNIQUEMENT en JSON (sans texte avant ou aprÃ¨s) :
 {
   "note": X,
-  "detail_bareme": "réponse X/3 - rédaction X/3 - justification X/3",
+  "detail_bareme": "rÃ©ponse X/3 - rÃ©daction X/3 - justification X/3",
   "appreciation": "...",
   "erreurs": ["erreur 1", "erreur 2"],
   "conseilsMethodologiques": ["conseil 1", "conseil 2"],
@@ -119,7 +119,7 @@ Réponds UNIQUEMENT en JSON (sans texte avant ou après) :
         sessionId: sessionStorage.getItem('session_id') || 'sess',
         joursRestantsEssai: 3, source: 'correcteur-ia', matiere: matiere
       });
-      const req = fetch('https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec', {
+      const req = fetch('https://script.google.com/macros/s/AKfycbxzUhsZ4ewxV_zGsu5h_L2eryTJiW2E-gZLvihC-vPl2DimCJxAeTF2dhbDF8no-ocG/exec', {
         method: 'POST',
         body: new URLSearchParams({ data: payload })
       }).then(r => r.json()).then(d => {
@@ -140,14 +140,14 @@ Réponds UNIQUEMENT en JSON (sans texte avant ou après) :
       const json = JSON.parse(correction);
       const b = baremes[matiere];
       resultDiv.innerHTML = `
-        <div class="note">📊 Note : ${json.note}/${b.points}</div>
-        <div style="margin: 0.5rem 0;"><strong>👍 Appréciation :</strong> ${json.appreciation || "..."}</div>
+        <div class="note">ðŸ“Š Note : ${json.note}/${b.points}</div>
+        <div style="margin: 0.5rem 0;"><strong>ðŸ‘ ApprÃ©ciation :</strong> ${json.appreciation || "..."}</div>
         <hr style="border-color:#333; margin:0.5rem 0;">
-        <strong>⚠️ Erreurs détectées :</strong>
+        <strong>âš ï¸ Erreurs dÃ©tectÃ©es :</strong>
         <ul>${(json.erreurs || []).map(e => `<li>${e}</li>`).join('') || "<li>Aucune erreur majeure</li>"}</ul>
-        <strong>💡 Conseils méthodologiques (${b.nom}) :</strong>
-        <ul>${(json.conseilsMethodologiques || []).map(c => `<li>${c}</li>`).join('') || "<li>Relisez votre texte à voix haute.</li>"}</ul>
-        <strong>✍️ Version corrigée :</strong><br>
+        <strong>ðŸ’¡ Conseils mÃ©thodologiques (${b.nom}) :</strong>
+        <ul>${(json.conseilsMethodologiques || []).map(c => `<li>${c}</li>`).join('') || "<li>Relisez votre texte Ã  voix haute.</li>"}</ul>
+        <strong>âœï¸ Version corrigÃ©e :</strong><br>
         <div style="background:#0a0a0f; padding:0.8rem; border-radius:0.8rem; margin-top:0.5rem;">${(json.versionCorrigee || "Non disponible").replace(/\n/g, '<br>')}</div>
       `;
     } catch(e) {
@@ -158,7 +158,7 @@ Réponds UNIQUEMENT en JSON (sans texte avant ou après) :
 
   document.getElementById("corrigerBtn").addEventListener("click", async () => {
     const texte = document.getElementById("userTexte").value.trim();
-    if (texte === "") { alert("Veuillez écrire un texte à corriger."); return; }
+    if (texte === "") { alert("Veuillez Ã©crire un texte Ã  corriger."); return; }
     const matiere = document.getElementById("matiereSelect").value;
     document.getElementById("loading").style.display = "block";
     document.getElementById("resultat").style.display = "none";

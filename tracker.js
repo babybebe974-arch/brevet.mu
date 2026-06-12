@@ -1,10 +1,10 @@
-// ============================================================
-// SMART LEARN — TRACKER v4.0
+﻿// ============================================================
+// SMART LEARN â€” TRACKER v4.0
 // Envoie les stats au proxy Apps Script via URLSearchParams
 // ============================================================
 
 (function() {
-  var PROXY = 'https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';
+  var PROXY = 'https://script.google.com/macros/s/AKfycbxzUhsZ4ewxV_zGsu5h_L2eryTJiW2E-gZLvihC-vPl2DimCJxAeTF2dhbDF8no-ocG/exec';
 
   function track(action, data) {
     try {

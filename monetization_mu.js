@@ -1,7 +1,7 @@
-// ============================================================
-// SMART LEARN — MONÉTISATION MAURICE (v1.0)
-// Essai 2 jours · 999 Rs · WhatsApp + Juice
-// Bannière permanente non fermable
+﻿// ============================================================
+// SMART LEARN â€” MONÃ‰TISATION MAURICE (v1.0)
+// Essai 2 jours Â· 999 Rs Â· WhatsApp + Juice
+// BanniÃ¨re permanente non fermable
 // ============================================================
 
 const MONETIZATION = {
@@ -20,7 +20,7 @@ const MONETIZATION = {
 };
 
 // ============================================================
-// FONCTIONS D'ÉTAT
+// FONCTIONS D'Ã‰TAT
 // ============================================================
 
 function estEnEssai() {
@@ -59,7 +59,7 @@ function joursRestantsEssai() {
 // ============================================================
 
 function validerCode(codeSaisi, callback) {
-  var PROXY = 'https://script.google.com/macros/s/AKfycbxxQCRDZvKAb9fuXkDslK7LYMXjcIrIi-_EpA8DWT1-tTelSpYcMxPkiSPG5bKheLTY/exec';
+  var PROXY = 'https://script.google.com/macros/s/AKfycbxzUhsZ4ewxV_zGsu5h_L2eryTJiW2E-gZLvihC-vPl2DimCJxAeTF2dhbDF8no-ocG/exec';
   var payload = JSON.stringify({
     userId: localStorage.getItem('user_id') || 'anon',
     action: 'valider_code',
@@ -79,17 +79,17 @@ function validerCode(codeSaisi, callback) {
   Promise.race([req, timeout]).then(function(data) {
     if (data && data.success === true) {
       localStorage.setItem(MONETIZATION.STORAGE_KEYS.paidValid, 'true');
-      if (callback) callback({ success: true, message: '✅ Code valide ! Accès débloqué.' });
+      if (callback) callback({ success: true, message: 'âœ… Code valide ! AccÃ¨s dÃ©bloquÃ©.' });
     } else {
-      if (callback) callback({ success: false, message: '❌ ' + (data && data.error ? data.error : 'Code invalide.') });
+      if (callback) callback({ success: false, message: 'âŒ ' + (data && data.error ? data.error : 'Code invalide.') });
     }
   }).catch(function() {
-    if (callback) callback({ success: false, message: '❌ Vérifiez votre connexion.' });
+    if (callback) callback({ success: false, message: 'âŒ VÃ©rifiez votre connexion.' });
   });
 }
 
 // ============================================================
-// BANNIÈRE PERMANENTE NON FERMABLE
+// BANNIÃˆRE PERMANENTE NON FERMABLE
 // ============================================================
 
 function creerBanniere() {
@@ -107,8 +107,8 @@ function creerBanniere() {
   var btnCol  = expire ? '#e87a7a' : '#e8c87a';
 
   var texte = expire
-    ? '⚠️ Essai gratuit terminé — Corrections IA bloquées'
-    : '🆓 Essai gratuit — <strong>J-' + j + '</strong> ' + (j <= 1 ? 'jour restant' : 'jours restants') + ' — Accès complet <strong>999 Rs/an</strong>';
+    ? 'âš ï¸ Essai gratuit terminÃ© â€” Corrections IA bloquÃ©es'
+    : 'ðŸ†“ Essai gratuit â€” <strong>J-' + j + '</strong> ' + (j <= 1 ? 'jour restant' : 'jours restants') + ' â€” AccÃ¨s complet <strong>999 Rs/an</strong>';
 
   banner.innerHTML = '<style>' +
     '#monet-banner{position:sticky;top:0;left:0;right:0;background:' + bg + ';color:' + couleur + ';' +
@@ -119,7 +119,7 @@ function creerBanniere() {
     '.monet-banner-btn:hover{opacity:0.85;}' +
     '</style>' +
     '<span>' + texte + '</span>' +
-    '<button class="monet-banner-btn" onclick="afficherOverlay()">💬 Débloquer via WhatsApp</button>';
+    '<button class="monet-banner-btn" onclick="afficherOverlay()">ðŸ’¬ DÃ©bloquer via WhatsApp</button>';
 
   document.body.insertBefore(banner, document.body.firstChild);
 }
@@ -134,7 +134,7 @@ function mettreAJourBanniere() {
 }
 
 // ============================================================
-// OVERLAY BLOQUANT — WHATSAPP JUICE MAURICE
+// OVERLAY BLOQUANT â€” WHATSAPP JUICE MAURICE
 // ============================================================
 
 function afficherOverlay() {
@@ -179,22 +179,22 @@ function afficherOverlay() {
     '.monet-msg.error{color:#e87a7a;}' +
     '</style>' +
     '<div class="monet-card">' +
-    '<div style="font-size:44px;margin-bottom:10px;">⏰</div>' +
-    '<div class="monet-title">Essai gratuit terminé</div>' +
-    '<div class="monet-sub">Débloquez l\'accès complet pour continuer à utiliser le correcteur IA.</div>' +
+    '<div style="font-size:44px;margin-bottom:10px;">â°</div>' +
+    '<div class="monet-title">Essai gratuit terminÃ©</div>' +
+    '<div class="monet-sub">DÃ©bloquez l\'accÃ¨s complet pour continuer Ã  utiliser le correcteur IA.</div>' +
     '<div class="monet-price">999 Rs <small>/ an</small></div>' +
     '<div class="monet-steps">' +
-    '1️⃣ Envoyez <strong>999 Rs</strong> par Juice au <strong>' + MONETIZATION.numeroJuice + '</strong><br>' +
-    '2️⃣ Envoyez la <strong>capture du paiement</strong> sur WhatsApp<br>' +
-    '3️⃣ Recevez votre <strong>code d\'activation</strong> par retour' +
+    '1ï¸âƒ£ Envoyez <strong>999 Rs</strong> par Juice au <strong>' + MONETIZATION.numeroJuice + '</strong><br>' +
+    '2ï¸âƒ£ Envoyez la <strong>capture du paiement</strong> sur WhatsApp<br>' +
+    '3ï¸âƒ£ Recevez votre <strong>code d\'activation</strong> par retour' +
     '</div>' +
-    '<a href="' + MONETIZATION.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite débloquer Hub Brevet 2026 (999 Rs). Je vous envoie ma capture Juice.') + '" ' +
-    'target="_blank" class="monet-wa-btn">💬 Contacter sur WhatsApp</a>' +
+    '<a href="' + MONETIZATION.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite dÃ©bloquer Hub Brevet 2026 (999 Rs). Je vous envoie ma capture Juice.') + '" ' +
+    'target="_blank" class="monet-wa-btn">ðŸ’¬ Contacter sur WhatsApp</a>' +
     '<hr class="monet-divider">' +
-    '<div style="font-size:12px;color:#9090a8;margin-bottom:10px;">Vous avez déjà reçu un code ?</div>' +
-    '<input type="text" class="monet-input" id="monet-code-input" placeholder="Entrez votre code d\'accès" maxlength="40">' +
+    '<div style="font-size:12px;color:#9090a8;margin-bottom:10px;">Vous avez dÃ©jÃ  reÃ§u un code ?</div>' +
+    '<input type="text" class="monet-input" id="monet-code-input" placeholder="Entrez votre code d\'accÃ¨s" maxlength="40">' +
     '<div>' +
-    '<button class="monet-btn" id="monet-valider-btn">✓ Valider le code</button>' +
+    '<button class="monet-btn" id="monet-valider-btn">âœ“ Valider le code</button>' +
     (canClose ? '<button class="monet-btn ghost" id="monet-close">Continuer l\'essai</button>' : '') +
     '</div>' +
     '<div class="monet-msg" id="monet-msg"></div>' +
@@ -211,7 +211,7 @@ function afficherOverlay() {
       var code = codeInput ? codeInput.value.trim() : '';
       if (!code) { msgDiv.className = 'monet-msg error'; msgDiv.textContent = 'Veuillez entrer un code.'; return; }
       validerBtn.disabled = true;
-      msgDiv.className = 'monet-msg'; msgDiv.textContent = 'Vérification...';
+      msgDiv.className = 'monet-msg'; msgDiv.textContent = 'VÃ©rification...';
       validerCode(code, function(result) {
         validerBtn.disabled = false;
         if (result.success) {
@@ -261,7 +261,7 @@ function initialiserEssai() {
       }
     }, 300);
   }
-  // Générer userId si absent
+  // GÃ©nÃ©rer userId si absent
   if (!localStorage.getItem('user_id')) {
     var id = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'user_' + Date.now();
     localStorage.setItem('user_id', id);
@@ -272,15 +272,15 @@ function initMonetization() {
   initialiserEssai();
   if (aAccesPayant()) return;
 
-  // Bannière permanente non fermable
+  // BanniÃ¨re permanente non fermable
   creerBanniere();
 
-  // Si essai expiré → overlay direct
+  // Si essai expirÃ© â†’ overlay direct
   if (essaiExpire()) {
     setTimeout(function() { afficherOverlay(); }, 500);
   }
 
-  // Mettre à jour la bannière toutes les minutes
+  // Mettre Ã  jour la banniÃ¨re toutes les minutes
   setInterval(mettreAJourBanniere, 60000);
 }
 
